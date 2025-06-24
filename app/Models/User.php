@@ -21,6 +21,8 @@ class User extends Authenticatable
         'name',
         'email',
         'password',
+        'rol',
+        'unidad_trabajo_id',
     ];
 
     /**
@@ -45,4 +47,8 @@ class User extends Authenticatable
             'password' => 'hashed',
         ];
     }
+
+    public function unidadTrabajo() {
+        return $this->belongsTo(UnidadTrabajo::class, 'unidad_trabajo_id');
+     }
 }
