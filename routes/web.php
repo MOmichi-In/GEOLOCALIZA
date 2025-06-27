@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\ProfileController;
 use App\Livewire\GestionUnidadesTrabajo;
+use App\Livewire\TaskAssignment;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', function () {
@@ -18,13 +19,26 @@ Route::middleware('auth')->group(function () {
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
 });
 
+Route::get('/tareas/asignar', TaskAssignment::class)
+    ->middleware('role:Coordinador_Administrativo') // Ajusta el rol si es diferente
+    ->name('tasks.assign');
+
 require __DIR__ . '/auth.php';
 
-Route::middleware([
-    'auth',
-    'role:"Lider_de_Proyecto / Analista, Coordinador_Administrativo"
+// Route::middleware([
+//     'auth',
+//     'role:Lider_de_Proyecto / Analista,Coordinador_Administrativo'
+// ])->group(function () { // Proteger la ruta
+//     Route::get('/gestion-unidades', GestionUnidadesTrabajo::class)->name('unidades.index');
+// });
 
-'
-])->group(function () { // Proteger la ruta
-    Route::get('/gestion-unidades', GestionUnidadesTrabajo::class)->name('gestion.unidades');
-});
+// Route::get('/check', function () {
+//     return 'Estás autenticado como ' . auth()->user()->name;
+// })->middleware('auth');
+
+// Route::get('/debug', function () {
+//     return [
+//         'auth' => auth()->check(),
+//         'user' => auth()->user(),
+//     ];
+// });

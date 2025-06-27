@@ -4,7 +4,7 @@ namespace App\Livewire;
 
 use App\Models\UnidadTrabajo;
 use Livewire\Component;
-use Livewire\WithPagination; // Para paginación
+use Livewire\WithPagination;
 
 class GestionUnidadesTrabajo extends Component
 {
@@ -15,18 +15,30 @@ class GestionUnidadesTrabajo extends Component
     public $isOpen = false;
     public $searchTerm = '';
 
-    protected $rules = [
-        'nombre' => 'required|string|max:255|unique:unidad_trabajos,nombre',
+    // Define las reglas de validación
+    // La regla 'unique' se ajustará dinámicamente en 'store' para la edición
+    protected function rules()
+    {
+        return [
+            'nombre' => 'required|string|max:255|unique:unidad_trabajos,nombre' . ($this->unidad_id ? ',' . $this->unidad_id : ''),
+        ];
+    }
+
+    // Opcional: mensajes de validación personalizados
+    protected $messages = [
+        'nombre.required' => 'El nombre de la unidad es obligatorio.',
+        'nombre.unique' => 'Este nombre de unidad ya existe.',
     ];
 
     public function render()
     {
-        $unidades = UnidadTrabajo::where('nombre', 'like', '%'.$this->searchTerm.'%')
-                                ->orderBy('id', 'desc')
-                                ->paginate(10);
+        $unidades = UnidadTrabajo::where('nombre', 'like', '%' . $this->searchTerm . '%')
+            ->orderBy('nombre', 'asc') // Cambiado a ordenar por nombre para mejor UX
+            ->paginate(10);
+
         return view('livewire.gestion-unidades-trabajo', [
             'unidades' => $unidades,
-        ])->layout('layouts.app'); // Asumiendo que usas el layout de Breeze
+        ])->layout('layouts.app');
     }
 
     public function create()
@@ -43,18 +55,20 @@ class GestionUnidadesTrabajo extends Component
     public function closeModal()
     {
         $this->isOpen = false;
+        $this->resetInputFields(); // También resetea al cerrar para limpiar el estado
     }
 
-    private function resetInputFields(){
+    private function resetInputFields()
+    {
         $this->nombre = '';
-        $this->unidad_id = null; // Cambiado para claridad
+        $this->unidad_id = null;
+        $this->resetErrorBag(); // Limpia errores de validación anteriores
+        $this->resetValidation(); // Limpia el estado de validación
     }
 
     public function store()
     {
-        $this->validate(
-            $this->unidad_id ? ['nombre' => 'required|string|max:255|unique:unidad_trabajos,nombre,'.$this->unidad_id] : $this->rules
-        );
+        $this->validate(); // Usará las reglas definidas en el método rules()
 
         UnidadTrabajo::updateOrCreate(['id' => $this->unidad_id], [
             'nombre' => $this->nombre,
@@ -64,7 +78,7 @@ class GestionUnidadesTrabajo extends Component
             $this->unidad_id ? 'Unidad de Trabajo actualizada correctamente.' : 'Unidad de Trabajo creada correctamente.');
 
         $this->closeModal();
-        $this->resetInputFields();
+        // $this->resetInputFields(); // Ya se llama en closeModal()
     }
 
     public function edit($id)
@@ -72,18 +86,31 @@ class GestionUnidadesTrabajo extends Component
         $unidad = UnidadTrabajo::findOrFail($id);
         $this->unidad_id = $id;
         $this->nombre = $unidad->nombre;
+        $this->resetErrorBag(); // Limpia errores por si había algo antes
         $this->openModal();
     }
 
     public function delete($id)
     {
-        // Opcional: verificar si hay usuarios asignados antes de borrar
-        $unidad = UnidadTrabajo::find($id);
-        if ($unidad && $unidad->users()->count() > 0) {
-             session()->flash('error', 'No se puede eliminar la unidad. Hay usuarios asignados a ella.');
-             return;
+        $unidad = UnidadTrabajo::withCount('users')->find($id); // Cargar conteo de usuarios
+
+        if (!$unidad) {
+            session()->flash('error', 'Unidad de Trabajo no encontrada.');
+            return;
         }
+
+        if ($unidad->users_count > 0) { // 'users_count' es el alias por defecto de withCount
+            session()->flash('error', 'No se puede eliminar la unidad. Hay ' . $unidad->users_count . ' usuarios asignados a ella.');
+            return;
+        }
+
         $unidad->delete();
         session()->flash('message', 'Unidad de Trabajo eliminada correctamente.');
+    }
+
+    // Para que la búsqueda se actualice mientras escribes
+    public function updatedSearchTerm()
+    {
+        $this->resetPage(); // Resetea la paginación cuando buscas
     }
 }
