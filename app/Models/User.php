@@ -43,7 +43,7 @@ class User extends Authenticatable // implements MustVerifyEmail (si lo usas)
         'email',
         'password',
         'rol', // Esta columna almacenará uno de los strings de las constantes de rol
-        'unidad_trabajo_id',
+        'unidad_trabajo_id', 
     ];
 
     /**

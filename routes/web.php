@@ -29,6 +29,8 @@ require __DIR__ . '/auth.php';
 Route::get('/usuarios/index', UserLivewire::class)
 ->name('usuarios');
 
+
+
 // Route::middleware([
 //     'auth',
 //     'role:Lider_de_Proyecto / Analista,Coordinador_Administrativo'
