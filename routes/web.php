@@ -3,6 +3,7 @@
 use App\Http\Controllers\ProfileController;
 use App\Livewire\GestionUnidadesTrabajo;
 use App\Livewire\TaskAssignment;
+use App\Livewire\UserLivewire;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', function () {
@@ -24,6 +25,9 @@ Route::get('/tareas/asignar', TaskAssignment::class)
     ->name('tasks.assign');
 
 require __DIR__ . '/auth.php';
+
+Route::get('/usuarios/index', UserLivewire::class)
+->name('usuarios');
 
 // Route::middleware([
 //     'auth',

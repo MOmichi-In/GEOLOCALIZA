@@ -26,6 +26,9 @@
                             {{ __('Asignar Tareas') }}
                         </x-nav-link>
                     @endif
+                     <x-nav-link :href="route('usuarios')" :active="request()->routeIs('usuarios')">
+                        {{ __('Usuarios') }}
+                    </x-nav-link>
                 </div>
             </div>
 
