@@ -1,4 +1,8 @@
+<<<<<<< HEAD
 <nav x-data="{ open: false }" class="bg-white dark:bg-red-700 border-b border-gray-100 dark:border-red-700">
+=======
+<nav x-data="{ open: false }" class="bg-white bg-red-800 border-gray-100 bg-red-800">
+>>>>>>> 64f33851103b05ce73cd65d221518956daa18520
     <!-- Primary Navigation Menu -->
     <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div class="flex justify-between h-16">
@@ -27,6 +31,7 @@
                             {{ __('Asignar Tareas') }}
                         </x-nav-link>
                     @endif
+
                     {{-- SUPERVISOR --}}
                     @if (Auth::user()->rol === \App\Models\User::ROLE_COORDINADOR_ADMINISTRATIVO)
                         {{-- O tu constante/valor de rol --}}
@@ -34,6 +39,9 @@
                             {{ __('Supervisor Dashboard') }}
                         </x-nav-link>
                     @endif
+                     <x-nav-link :href="route('usuarios')" :active="request()->routeIs('usuarios')">
+                        {{ __('Usuarios') }}
+                    </x-nav-link>
                 </div>
             </div>
 
