@@ -44,7 +44,20 @@ class User extends Authenticatable // implements MustVerifyEmail (si lo usas)
         'password',
         'rol', // Esta columna almacenará uno de los strings de las constantes de rol
         'unidad_trabajo_id',
+        'supervisor_id',
     ];
+
+    // Añade la relación
+    public function supervisor()
+    {
+        return $this->belongsTo(User::class, 'supervisor_id');
+    }
+
+    // También es útil tener la relación inversa
+    public function operadoresASuCargo()
+    {
+        return $this->hasMany(User::class, 'supervisor_id');
+    }
 
     /**
      * The attributes that should be hidden for serialization.
