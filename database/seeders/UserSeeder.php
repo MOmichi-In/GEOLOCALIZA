@@ -14,7 +14,7 @@ class UserSeeder extends Seeder
             'name' => 'Proyecto',
             'email' => 'proyecto@ejemplo.com',
             'password' => Hash::make('password123'),
-            'rol' => 'Lider_de_Proyecto / Analista',
+            'rol' => 'Lider_Proyecto_Analista',
         ]);
 
         User::create([
@@ -23,5 +23,6 @@ class UserSeeder extends Seeder
             'password' => Hash::make('password123'),
             'rol' => 'Coordinador_Administrativo',
         ]);
+        
     }
 }
