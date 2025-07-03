@@ -16,7 +16,7 @@ return new class extends Migration {
             $table->string('email')->unique();
             $table->timestamp('email_verified_at')->nullable();
             $table->string('password');
-            $table->string('rol')->default('operador'); // ejemplo: valor por defecto
+            $table->string('rol')->nullable(); // ejemplo: valor por defecto
 
             $table->rememberToken();
             $table->timestamps();

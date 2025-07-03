@@ -1,10 +1,12 @@
 <?php
 
 use App\Http\Controllers\ProfileController;
+use App\Livewire\EditarLivewire;
 use App\Livewire\GestionUnidadesTrabajo;
 use App\Livewire\Supervisor\Dashboard;
 use App\Livewire\TaskAssignment;
 use App\Livewire\UserLivewire;
+use App\Livewire\Usuarios;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', function () {
@@ -32,8 +34,8 @@ Route::get('/supervisor/dashboard', Dashboard::class)
 //AUTH
 require __DIR__ . '/auth.php';
 
-Route::get('/usuarios/index', UserLivewire::class)
-->name('usuarios');
+Route::get('/users/index', Usuarios::class)
+->name('users');
 
 
 
