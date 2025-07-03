@@ -8,8 +8,8 @@ use App\Livewire\UserLivewire;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', function () {
-    return view('welcome');
-});
+    return view('auth.login');
+})->name('login');
 //INICIO
 Route::get('/dashboard', function () {
     return view('dashboard');
@@ -37,12 +37,12 @@ Route::get('/usuarios/index', UserLivewire::class)
 
 
 
-// Route::middleware([
-//     'auth',
-//     'role:Lider_de_Proyecto / Analista,Coordinador_Administrativo'
-// ])->group(function () { // Proteger la ruta
-//     Route::get('/gestion-unidades', GestionUnidadesTrabajo::class)->name('unidades.index');
-// });
+Route::middleware([
+    'auth',
+    'role:Coordinador_Administrativo'
+])->group(function () { // Proteger la ruta
+    Route::get('/gestion-unidades', GestionUnidadesTrabajo::class)->name('unidades.index');
+});
 
 // Route::get('/check', function () {
 //     return 'Estás autenticado como ' . auth()->user()->name;
