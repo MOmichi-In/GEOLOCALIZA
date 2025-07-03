@@ -1,4 +1,5 @@
 <?php
+
 namespace App\Livewire;
 
 use Livewire\Component;
@@ -7,15 +8,16 @@ use Illuminate\Support\Facades\Hash;
 
 class Usuarios extends Component
 {
-    public $usuarios, $name, $email, $password, $rol = 'operador', $user_id;
+    public $usuarios;
+
+    public $name, $email, $password, $rol = '', $user_id;
     public $editando = false;
-    
+    public $modalVisible = false;
 
     public function render()
     {
         $this->usuarios = User::all();
-        return view('livewire.usuarios')
-            ->layout('layouts.app');
+        return view('livewire.usuarios')->layout('layouts.app');
     }
 
     public function limpiarCampos()
@@ -23,13 +25,24 @@ class Usuarios extends Component
         $this->name = '';
         $this->email = '';
         $this->password = '';
-        $this->rol = 'operador';
+        $this->rol = '';
         $this->user_id = null;
+        $this->editando = false;
+    }
+
+    public function mostrarModal()
+    {
+        $this->modalVisible = true;
+    }
+
+    public function ocultarModal()
+    {
+        $this->modalVisible = false;
+        $this->limpiarCampos();
     }
 
     public function guardar()
     {
-        // Si estamos en modo edición, actualizar
         if ($this->editando) {
             $this->actualizar();
             return;
@@ -50,7 +63,7 @@ class Usuarios extends Component
         ]);
 
         session()->flash('message', 'Usuario creado con éxito.');
-        $this->limpiarCampos();
+        $this->ocultarModal();
     }
 
     public function editar($id)
@@ -61,37 +74,32 @@ class Usuarios extends Component
         $this->email = $usuario->email;
         $this->rol = $usuario->rol;
         $this->editando = true;
+        $this->modalVisible = true;
     }
 
     public function actualizar()
-{
-    $this->validate([
-        'name' => 'required',
-        'email' => 'required|email|unique:users,email,'.$this->user_id,
-        'rol' => 'required|in:Analista,Operador_Logistico,Coordinador_Administrativo,Supervisor',
-    ]);
+    {
+        $this->validate([
+            'name' => 'required',
+            'email' => 'required|email|unique:users,email,' . $this->user_id,
+            'rol' => 'required|in:Analista,Operador_Logistico,Coordinador_Administrativo,Supervisor',
+        ]);
 
-    $usuario = User::findOrFail($this->user_id);
-    $usuario->update([
-        'name' => $this->name,
-        'email' => $this->email,
-        'rol' => $this->rol,
-        'password' => $this->password ? Hash::make($this->password) : $usuario->password,
-    ]);
+        $usuario = User::findOrFail($this->user_id);
+        $usuario->update([
+            'name' => $this->name,
+            'email' => $this->email,
+            'rol' => $this->rol,
+            'password' => $this->password ? Hash::make($this->password) : $usuario->password,
+        ]);
 
-    session()->flash('message', 'Usuario actualizado.');
-    $this->limpiarCampos();
-
-
-    $this->editando = false;
-}
-
+        session()->flash('message', 'Usuario actualizado con éxito.');
+        $this->ocultarModal();
+    }
 
     public function eliminar($id)
     {
         User::findOrFail($id)->delete();
-        session()->flash('message', 'Usuario eliminado.');
+        session()->flash('message', 'Usuario eliminado con éxito.');
     }
-
-     
 }

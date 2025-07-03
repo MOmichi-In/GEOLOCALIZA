@@ -38,7 +38,6 @@ Route::get('/users/index', Usuarios::class)
 ->name('users');
 
 
-
 Route::middleware([
     'auth',
     'role:Coordinador_Administrativo'
