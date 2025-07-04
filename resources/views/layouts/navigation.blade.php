@@ -1,4 +1,5 @@
 <!-- Sidebar Component - Reemplaza solo tu nav actual -->
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined" rel="stylesheet" />
 <div x-data="{ sidebarOpen: false }" class="relative">
     <!-- Sidebar -->
     <div :class="sidebarOpen ? 'translate-x-0' : '-translate-x-full'"
@@ -15,18 +16,19 @@
                 <!-- Dashboard -->
                 <a href="{{ route('dashboard') }}"
                     class="flex items-center px-4 py-3 text-sm font-medium rounded-lg transition-all duration-200 group
-                          {{ request()->routeIs('dashboard')
-                              ? 'bg-red-900 text-white shadow-inner border-r-4 border-red-300'
-                              : 'text-red-100 hover:text-white hover:bg-red-600' }}">
-                    <svg class="w-5 h-5 mr-3 {{ request()->routeIs('dashboard') ? 'text-red-300' : 'text-red-200 group-hover:text-white' }}"
-                        fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                            d="M3 7v10a2 2 0 002 2h14a2 2 0 002-2V9a2 2 0 00-2-2H5a2 2 0 00-2-2z"></path>
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                            d="M8 5a2 2 0 012-2h4a2 2 0 012 2v6H8V5z"></path>
-                    </svg>
-                    <span>{{ __('Dashboard') }}</span>
+        {{ request()->routeIs('dashboard')
+            ? 'bg-red-900 text-white shadow-inner border-r-4 border-red-300'
+            : 'text-red-100 hover:text-white hover:bg-red-600' }}">
+
+                    <span
+                        class="material-symbols-outlined text-xl mr-3 
+        {{ request()->routeIs('dashboard') ? 'text-red-300' : 'text-red-200 group-hover:text-white' }}">
+                        home
+                    </span>
+
+                    <span>{{ __('Inicio') }}</span>
                 </a>
+
 
                 @if (Auth::user()->rol === 'Coordinador_Administrativo')
                     <!-- Unidades de Trabajo -->
@@ -49,48 +51,51 @@
                     <!-- Asignar Tareas -->
                     <a href="{{ route('tasks.assign') }}"
                         class="flex items-center px-4 py-3 text-sm font-medium rounded-lg transition-all duration-200 group
-                              {{ request()->routeIs('tasks.assign')
-                                  ? 'bg-red-900 text-white shadow-inner border-r-4 border-red-300'
-                                  : 'text-red-100 hover:text-white hover:bg-red-600' }}">
-                        <svg class="w-5 h-5 mr-3 {{ request()->routeIs('tasks.assign') ? 'text-red-300' : 'text-red-200 group-hover:text-white' }}"
-                            fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                d="M9 5H7a2 2 0 00-2 2v10a2 2 0 002 2h8a2 2 0 002-2V7a2 2 0 00-2-2h-2M9 5a2 2 0 002 2h2a2 2 0 002-2M9 5a2 2 0 012-2h2a2 2 0 012 2m-6 9l2 2 4-4">
-                            </path>
-                        </svg>
+          {{ request()->routeIs('tasks.assign')
+              ? 'bg-red-900 text-white shadow-inner border-r-4 border-red-300'
+              : 'text-red-100 hover:text-white hover:bg-red-600' }}">
+
+                        <span
+                            class="material-symbols-outlined text-xl mr-3 
+        {{ request()->routeIs('tasks.assign') ? 'text-red-300' : 'text-red-200 group-hover:text-white' }}">
+                            assignment_add
+                        </span>
+
                         <span>{{ __('Asignar Tareas') }}</span>
                     </a>
 
-                    <!-- Supervisor Dashboard -->
                     <a href="{{ route('supervisor.dashboard') }}"
                         class="flex items-center px-4 py-3 text-sm font-medium rounded-lg transition-all duration-200 group
-                              {{ request()->routeIs('supervisor.dashboard')
-                                  ? 'bg-red-900 text-white shadow-inner border-r-4 border-red-300'
-                                  : 'text-red-100 hover:text-white hover:bg-red-600' }}">
-                        <svg class="w-5 h-5 mr-3 {{ request()->routeIs('supervisor.dashboard') ? 'text-red-300' : 'text-red-200 group-hover:text-white' }}"
-                            fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                                d="M9 19v-6a2 2 0 00-2-2H5a2 2 0 00-2 2v6a2 2 0 002 2h2a2 2 0 002-2zm0 0V9a2 2 0 012-2h2a2 2 0 012 2v10m-6 0a2 2 0 002 2h2a2 2 0 002-2m0 0V5a2 2 0 012-2h2a2 2 0 012 2v14a2 2 0 01-2 2h-2a2 2 0 01-2-2z">
-                            </path>
-                        </svg>
-                        <span>{{ __('Supervisor Dashboard') }}</span>
+        {{ request()->routeIs('supervisor.dashboard')
+            ? 'bg-red-900 text-white shadow-inner border-r-4 border-red-300'
+            : 'text-red-100 hover:text-white hover:bg-red-600' }}">
+
+                        <span
+                            class="material-symbols-outlined text-xl mr-3 
+        {{ request()->routeIs('supervisor.dashboard') ? 'text-red-300' : 'text-red-200 group-hover:text-white' }}">
+                            supervisor_account
+                        </span>
+
+                        <span>{{ __('Supervisor ') }}</span>
                     </a>
                 @endif
 
                 <!-- Usuarios -->
                 <a href="{{ route('users') }}"
                     class="flex items-center px-4 py-3 text-sm font-medium rounded-lg transition-all duration-200 group
-                          {{ request()->routeIs('usuarios')
-                              ? 'bg-red-900 text-white shadow-inner border-r-4 border-red-300'
-                              : 'text-red-100 hover:text-white hover:bg-red-600' }}">
-                    <svg class="w-5 h-5 mr-3 {{ request()->routeIs('users') ? 'text-red-300' : 'text-red-200 group-hover:text-white' }}"
-                        fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                            d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197m13.5-9a2.5 2.5 0 11-5 0 2.5 2.5 0 015 0z">
-                        </path>
-                    </svg>
+        {{ request()->routeIs('usuarios')
+            ? 'bg-red-900 text-white shadow-inner border-r-4 border-red-300'
+            : 'text-red-100 hover:text-white hover:bg-red-600' }}">
+
+                    <span
+                        class="material-symbols-outlined text-xl mr-3 
+        {{ request()->routeIs('users') ? 'text-red-300' : 'text-red-200 group-hover:text-white' }}">
+                        groups
+                    </span>
+
                     <span>{{ __('Usuarios') }}</span>
                 </a>
+
             </div>
         </nav>
 

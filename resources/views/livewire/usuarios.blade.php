@@ -18,7 +18,7 @@
     <div class="bg-gray rounded">
         <div class="flex justify-between items-center mb-9">
             <h3 class="text-2xl font-bold text-gray-800">Usuarios Registrados</h3>
-            <button wire:click="mostrarModal" class="bg-red-700 hover:bg-red-800 text-white px-4 py-3 rounded transition">
+            <button wire:click="mostrarModal" class="bg-red-700 hover:bg-red-600 text-white px-4 py-3 rounded transition">
                 Crear Usuario
             </button>
         </div>

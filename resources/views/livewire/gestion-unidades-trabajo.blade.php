@@ -22,7 +22,7 @@
                         </div>
                     @endif
 
-                    <button wire:click="create()" class="bg-blue-500 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded mb-4">
+                    <button wire:click="create()" class="bg-red-700 hover:bg-red-600 text-white font-bold py-2 px-4 rounded mb-4">
                         Crear Nueva Unidad
                     </button>
 
@@ -44,7 +44,7 @@
                                 <tr>
                                     <td class="px-6 py-4 whitespace-nowrap">{{ $unidad->nombre }}</td>
                                     <td class="px-6 py-4 whitespace-nowrap text-sm font-medium">
-                                        <button wire:click="edit({{ $unidad->id }})" class="text-indigo-600 hover:text-indigo-900">Editar</button>
+                                        <button wire:click="edit({{ $unidad->id }})" class="text-gray-600 hover:text-gray-900">Editar</button>
                                         <button wire:click="delete({{ $unidad->id }})" wire:confirm="¿Estás seguro de eliminar esta unidad?" class="text-red-600 hover:text-red-900 ml-2">Eliminar</button>
                                     </td>
                                 </tr>

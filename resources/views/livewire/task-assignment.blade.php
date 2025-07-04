@@ -11,7 +11,7 @@
                 <div class="p-1 text-gray-900 dark:text-black-100">
                     <div class="flex justify-between items-center mb-9">
                         <h3 class="text-2xl font-bold text-gray-800">Listado de tareas asignadas</h3>
-                        <button wire:click="create()" class="px-4 py-2 bg-red-700 text-white rounded-md hover:bg-red-800">
+                        <button wire:click="create()" class="px-4 py-2 bg-red-700 text-white rounded-md hover:bg-red-600">
                             Asignar Nueva Tarea
                         </button>
                     </div>
