@@ -100,7 +100,7 @@
         </nav>
 
         <!-- User Profile Section -->
-        <div class="absolute bottom-0 left-0 right-0 p-4 bg-red-900 border-t border-red-800">
+        <div class="absolute bottom-0 left-0 right-0 p-4 bg-red-800 border-t border-red-900">
             <div x-data="{ profileOpen: false }" class="relative">
                 <button @click="profileOpen = !profileOpen"
                     class="flex items-center w-full px-3 py-2 text-sm font-medium text-white rounded-lg hover:bg-red-800 transition-colors duration-200">
