@@ -1,10 +1,10 @@
 <section>
     <header>
-        <h2 class="text-lg font-medium text-black dark:text-gray-900">
+        <h2 class="text-lg font-medium text-black ">
             {{ __('Informacion del perfil') }}
         </h2>
 
-        <p class="mt-1 text-sm text-black dark:text-gray-900">
+        <p class="mt-1 text-sm text-black">
             {{ __("Actualice la información del perfil y la dirección de correo electrónico de su cuenta.") }}
         </p>
     </header>
@@ -30,16 +30,16 @@
 
             @if ($user instanceof \Illuminate\Contracts\Auth\MustVerifyEmail && ! $user->hasVerifiedEmail())
                 <div>
-                    <p class="text-sm mt-2 text-black dark:text-gray-100">
+                    <p class="text-sm mt-2 text-black ">
                         {{ __('Your email address is unverified.') }}
 
-                        <button form="send-verification" class="underline text-sm text-gray-600 dark:text-gray-400 hover:text-gray-100 dark:hover:text-gray-100 rounded-md focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500 dark:focus:ring-offset-gray-100">
+                        <button form="send-verification" class="underline text-sm text-gray-600  hover:text-gray-100  rounded-md focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500 focus:ring-offset-gray-100">
                             {{ __('Click here to re-send the verification email.') }}
                         </button>
                     </p>
 
                     @if (session('status') === 'verification-link-sent')
-                        <p class="mt-2 font-medium text-sm text-green-600 dark:text-green-400">
+                        <p class="mt-2 font-medium text-sm text-green-600">
                             {{ __('A new verification link has been sent to your email address.') }}
                         </p>
                     @endif
@@ -56,7 +56,7 @@
                     x-show="show"
                     x-transition
                     x-init="setTimeout(() => show = false, 2000)"
-                    class="text-sm text-white dark:text-gray-100"
+                    class="text-sm text-black"
                 >{{ __('Saved.') }}</p>
             @endif
         </div>
