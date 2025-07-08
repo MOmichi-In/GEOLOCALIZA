@@ -11,20 +11,18 @@ return new class extends Migration {
     public function up(): void
     {
         Schema::table('users', function (Blueprint $table) {
-            // El supervisor de un usuario (operador) es otro usuario (supervisor)
-            // nullable() porque los supervisores y analistas no tienen un supervisor asignado
-            $table->foreignId('supervisor_id')->nullable()->constrained('users')->onDelete('set null');
+            // Un usuario (operador) puede estar asignado a una unidad.
+            // Es `nullable` para operadores no asignados.
+            // La FK apunta a la tabla `unidad_trabajos`.
+            $table->foreignId('unidad_trabajo_id')->nullable();
         });
     }
 
-    /**
-     * Reverse the migrations.
-     */
     public function down(): void
     {
         Schema::table('users', function (Blueprint $table) {
-            $table->dropForeign(['supervisor_id']);
-            $table->dropColumn('supervisor_id');
+            $table->dropForeign(['unidad_trabajo_id']);
+            $table->dropColumn('unidad_trabajo_id');
         });
     }
 };

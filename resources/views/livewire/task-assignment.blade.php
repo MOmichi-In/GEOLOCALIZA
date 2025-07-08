@@ -124,9 +124,20 @@
                                         </div>
                                     </form>
                                 </div>
-                            </div>
-                        </div>
-                    @endif
+                            </td>
+                        </tr>
+                    @empty
+                        <tr>
+                            <td colspan="7" class="text-center text-gray-500 py-4">No hay tareas asignadas.</td>
+                        </tr>
+                    @endforelse
+                </tbody>
+            </table>
+        </div>
+        @if($tareasPaginadas->hasPages())
+        <div class="mt-6">{{ $tareasPaginadas->links() }}</div>
+        @endif
+    </div>
 
                     {{-- Tabla de Tareas Asignadas --}}
                     <div class="overflow-x-auto rounded-lg border border-gray-200">
@@ -194,8 +205,56 @@
                         {{ $tareasPaginadas->links() }}
                     </div>
 
+            <form wire:submit.prevent="store" class="space-y-4">
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <div>
+                        <label class="block text-sm font-medium text-gray-900 mb-1">Fecha de Trabajo</label>
+                        <input type="date" wire:model="fecha_trabajo" class="w-full px-4 py-2 border rounded-lg">
+                        @error('fecha_trabajo') <span class="text-red-500 text-sm">{{ $message }}</span> @enderror
+                    </div>
+                    <div>
+                        <label class="block text-sm font-medium text-gray-900 mb-1">Ciclo</label>
+                        <input type="text" wire:model="ciclo" class="w-full px-4 py-2 border rounded-lg" placeholder="Ej: Lectura 01">
+                        @error('ciclo') <span class="text-red-500 text-sm">{{ $message }}</span> @enderror
+                    </div>
+                    <div>
+                        <label class="block text-sm font-medium text-gray-900 mb-1">Correría / Ruta</label>
+                        <input type="text" wire:model="correria" class="w-full px-4 py-2 border rounded-lg" placeholder="Ej: Ruta 15-B">
+                        @error('correria') <span class="text-red-500 text-sm">{{ $message }}</span> @enderror
+                    </div>
+                    <div>
+                        <label class="block text-sm font-medium text-gray-900 mb-1">Operador Logístico</label>
+                        <select wire:model.live="operador_id" class="w-full px-4 py-2 border rounded-lg">
+                            <option value="">Seleccione un Operador</option>
+                            @foreach ($operadores as $operador)
+                                <option value="{{ $operador->id }}">{{ $operador->name }}</option>
+                            @endforeach
+                        </select>
+                        @error('operador_id') <span class="text-red-500 text-sm">{{ $message }}</span> @enderror
+                    </div>
                 </div>
-            </div>
+
+                <!-- Campos Automáticos -->
+                @if($operador_id)
+                <div class="mt-4 p-4 bg-gray-50 rounded-lg border grid grid-cols-1 md:grid-cols-2 gap-4">
+                    <div>
+                        <label class="block text-sm font-medium text-gray-500">Supervisor Asignado:</label>
+                        <p class="font-semibold text-gray-800">{{ $supervisor_nombre ?: 'Cargando...' }}</p>
+                    </div>
+                    <div>
+                        <label class="block text-sm font-medium text-gray-500">Unidad de Trabajo:</label>
+                        <p class="font-semibold text-gray-800">{{ $unidad_trabajo_nombre ?: 'Cargando...' }}</p>
+                    </div>
+                </div>
+                @endif
+
+                <div class="flex justify-end gap-3 pt-4">
+                    <button type="submit" class="bg-red-800 hover:bg-red-700 text-white px-5 py-2 rounded">
+                        {{ $isEditMode ? 'Actualizar Tarea' : 'Guardar Tarea' }}
+                    </button>
+                    <button type="button" wire:click="closeModal" class="bg-gray-500 hover:bg-gray-600 text-white px-5 py-2 rounded">Cancelar</button>
+                </div>
+            </form>
         </div>
     </div>
 </div>

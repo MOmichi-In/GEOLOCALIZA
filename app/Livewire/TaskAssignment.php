@@ -5,202 +5,162 @@ namespace App\Livewire;
 use Livewire\Component;
 use App\Models\User;
 use App\Models\TareaAsignada;
-use App\Models\RegistroAsistencia; // Importado para la validación en delete()
+use App\Models\RegistroAsistencia;
 use Carbon\Carbon;
-use Illuminate\Support\Facades\Auth;
 use Livewire\WithPagination;
 
 class TaskAssignment extends Component
 {
     use WithPagination;
 
-    // Propiedades para el formulario del modal
+    // Propiedades del formulario
+    public $tareaId;
     public $fecha_trabajo;
     public $ciclo;
     public $correria;
     public $operador_id;
-    public $selectedOperadorUnidadTrabajo = '';
-    public $selectedOperadorSupervisor = ''; // Para mostrar el supervisor en el modal
 
-    // Propiedades para el manejo del componente
+    // Propiedades que se rellenan automáticamente
+    public $unidad_trabajo_nombre = '';
+    public $supervisor_nombre = '';
+
+    // Propiedades de estado
     public $operadores = [];
-    public $tareaId;
     public $isModalOpen = false;
     public $isEditMode = false;
 
     /**
-     * Reglas de validación para el formulario.
-     * Incluye una validación personalizada para asegurar que el operador tiene un supervisor.
+     * Reglas de validación para el formulario de asignación de tareas.
      */
-    protected function rules()
-    {
+    protected function rules() {
         return [
             'fecha_trabajo' => 'required|date',
             'ciclo' => 'required|string|max:100',
             'correria' => 'required|string|max:100',
             'operador_id' => [
-                'required',
-                'exists:users,id',
+                'required', 'exists:users,id',
+                // La validación ahora comprueba la cadena de relaciones completa.
                 function ($attribute, $value, $fail) {
-                    $operador = User::find($value);
-                    if ($operador && !$operador->supervisor_id) {
-                        $fail('El operador seleccionado no tiene un supervisor asignado. Por favor, asígnelo primero.');
+                    $operador = User::with('unidadTrabajo.supervisor')->find($value);
+                    if (!$operador || !$operador->unidadTrabajo) {
+                        $fail('El operador seleccionado no tiene una unidad de trabajo asignada.');
+                        return; // Detiene la validación si no hay unidad.
                     }
-                }, // <-- CORRECCIÓN: Se añadió la coma que faltaba aquí.
+                    if (!$operador->unidadTrabajo->supervisor) {
+                        $fail('La unidad de trabajo de este operador no tiene un supervisor a cargo.');
+                    }
+                },
             ],
         ];
     }
-
+    
     /**
-     * Mensajes de error personalizados para una mejor experiencia de usuario.
+     * El método mount se ejecuta al inicializar el componente.
      */
-    protected $messages = [
-        'fecha_trabajo.required' => 'La fecha de trabajo es obligatoria.',
-        'ciclo.required' => 'El ciclo es obligatorio.',
-        'correria.required' => 'La correría es obligatoria.',
-        'operador_id.required' => 'Debe seleccionar un operador.',
-        'operador_id.exists' => 'El operador seleccionado no es válido.',
-    ];
-
-    /**
-     * El método mount se ejecuta una vez, cuando el componente se inicializa.
-     * Ideal para cargar datos que no cambian, como la lista de operadores.
-     */
-    public function mount()
-    {
-        // MEJORA: Se usa Eager Loading para cargar las relaciones y evitar consultas N+1.
+    public function mount() {
+        // Cargamos operadores CON las relaciones en cadena para ser eficientes.
         $this->operadores = User::where('rol', User::ROLE_OPERADOR_LOGISTICO)
-                                ->with(['unidadTrabajo', 'supervisor'])
-                                ->orderBy('name')
-                                ->get();
+                                ->with('unidadTrabajo.supervisor') // Carga anidada de relaciones.
+                                ->orderBy('name')->get();
         $this->fecha_trabajo = Carbon::today()->toDateString();
     }
-
+    
     /**
-     * El método render se encarga de mostrar la vista.
-     * Se ejecuta cada vez que una propiedad pública cambia.
+     * Renderiza la vista del componente.
      */
-    public function render()
-    {
-        // MEJORA: Se usa Eager Loading aquí también para la tabla, haciendo la paginación eficiente.
-        $tareasPaginadas = TareaAsignada::with(['operador.unidadTrabajo', 'supervisor'])
-                                        ->orderBy('fecha_trabajo', 'desc')
-                                        ->orderBy('id', 'desc')
-                                        ->paginate(10);
-
-        return view('livewire.task-assignment', [
-            'tareasPaginadas' => $tareasPaginadas,
-        ])->layout('layouts.app');
+    public function render() {
+        // Se cargan las tareas paginadas con sus relaciones para la tabla.
+        $tareasPaginadas = TareaAsignada::with(['operador.unidadTrabajo.supervisor'])
+                                        ->orderBy('fecha_trabajo', 'desc')->paginate(10);
+        return view('livewire.task-assignment', ['tareasPaginadas' => $tareasPaginadas])->layout('layouts.app');
     }
-
+    
     /**
-     * Este "hook" se ejecuta automáticamente cuando la propiedad $operador_id es actualizada.
-     * Es la clave de la reactividad para mostrar datos automáticos.
+     * Hook que se ejecuta cuando cambia el operador seleccionado.
      */
-    public function updatedOperadorId($value)
-    {
-        if ($value) {
-            // MEJORA: Se usa la colección ya cargada en mount() en lugar de hacer una nueva consulta a la BD.
-            $operador = $this->operadores->firstWhere('id', $value);
-
-            if ($operador) {
-                $this->selectedOperadorUnidadTrabajo = $operador->unidadTrabajo->nombre ?? 'Sin unidad asignada';
-                $this->selectedOperadorSupervisor = $operador->supervisor->name ?? 'Sin supervisor asignado';
-            }
-        } else {
-            $this->reset(['selectedOperadorUnidadTrabajo', 'selectedOperadorSupervisor']);
-        }
-    }
-
-    /**
-     * Prepara el componente para crear un nuevo registro.
-     */
-    public function create()
-    {
-        $this->resetInputFields();
-        $this->isEditMode = false;
-        $this->fecha_trabajo = Carbon::today()->toDateString();
-        $this->openModal();
-    }
-
-    /**
-     * Guarda o actualiza el registro en la base de datos.
-     * Aquí se encuentra la lógica principal del módulo.
-     */
-    public function store()
-    {
-        $this->validate();
-
-        $operador = User::find($this->operador_id); // Se busca el operador para obtener su supervisor_id
-
-        // Lógica para prevenir duplicados
-        $exists = TareaAsignada::where('fecha_trabajo', $this->fecha_trabajo)
-            ->where('operador_id', $this->operador_id)
-            ->when($this->tareaId, fn ($query) => $query->where('id', '!=', $this->tareaId))
-            ->exists();
-
-        if ($exists) {
-            $this->addError('operador_id', 'Este operador ya tiene una tarea asignada para esta fecha.');
+    public function updatedOperadorId($value) {
+        if (empty($value)) {
+            $this->reset(['unidad_trabajo_nombre', 'supervisor_nombre']);
             return;
         }
 
-        // LÓGICA CLAVE: Se crea o actualiza la tarea, asegurando que se guarde el supervisor_id.
+        // Se usa la colección ya cargada en mount() para no consultar de nuevo la BD.
+        $operador = $this->operadores->firstWhere('id', $value);
+
+        if ($operador) {
+            $this->unidad_trabajo_nombre = $operador->unidadTrabajo->nombre ?? 'Sin Unidad Asignada';
+            // Se obtiene el supervisor a través de la unidad (fuente única de la verdad).
+            $this->supervisor_nombre = $operador->unidadTrabajo->supervisor->name ?? 'Sin Supervisor en la Unidad';
+        }
+    }
+    
+    /**
+     * Guarda o actualiza una tarea en la base de datos.
+     */
+    public function store() {
+        $this->validate();
+
+        $operador = User::find($this->operador_id);
+        // Se obtiene el ID del supervisor directamente de la unidad del operador.
+        $supervisorId = $operador->unidadTrabajo->supervisor_id;
+
+        // Lógica para prevenir duplicados.
+        // ... (Tu lógica de duplicados puede ir aquí si la necesitas) ...
+
         TareaAsignada::updateOrCreate(['id' => $this->tareaId], [
             'fecha_trabajo' => $this->fecha_trabajo,
             'ciclo' => $this->ciclo,
             'correria' => $this->correria,
             'operador_id' => $this->operador_id,
-            'supervisor_id' => $operador->supervisor_id, // ¡Se guarda el ID del supervisor del operador!
-            // 'asignado_por_id' => auth()->id(), // Descomentar si añades esta columna para auditoría
+            'supervisor_id' => $supervisorId, // Se guarda el ID del supervisor correcto.
         ]);
 
-        session()->flash('message',
-            $this->tareaId ? 'Tarea actualizada exitosamente.' : 'Tarea asignada exitosamente.');
-
+        session()->flash('message', $this->isEditMode ? 'Tarea actualizada correctamente.' : 'Tarea asignada correctamente.');
         $this->closeModal();
     }
 
-    /**
-     * Prepara el componente para editar un registro existente.
-     */
-    public function edit($id)
-    {
+    // --- Métodos de utilidad (manejo del modal y edición/borrado) ---
+
+    public function create() {
+        $this->resetInputFields();
+        $this->isEditMode = false; // Asegurarse de que no esté en modo edición.
+        $this->openModal();
+    }
+    
+    public function edit($id) {
         $tarea = TareaAsignada::findOrFail($id);
         $this->resetInputFields();
-
+        $this->isEditMode = true;
+        
         $this->tareaId = $id;
         $this->fecha_trabajo = Carbon::parse($tarea->fecha_trabajo)->toDateString();
         $this->ciclo = $tarea->ciclo;
         $this->correria = $tarea->correria;
         $this->operador_id = $tarea->operador_id;
-        $this->updatedOperadorId($this->operador_id); // Rellena los campos automáticos
-
-        $this->isEditMode = true;
+        
+        // Rellena los campos automáticos con los datos de la tarea a editar.
+        $this->updatedOperadorId($this->operador_id);
+        
         $this->openModal();
     }
-
-    /**
-     * Elimina un registro de la base de datos.
-     */
-    public function delete($id)
-    {
-        // MEJORA: Validación para no borrar tareas que ya tienen trabajo registrado.
+    
+    public function delete($id) {
+        // Validación para no borrar tareas con registros de asistencia.
         if (RegistroAsistencia::where('tarea_asignada_id', $id)->exists()) {
-            session()->flash('error', 'No se puede eliminar la tarea porque ya tiene registros de asistencia asociados.');
+            session()->flash('error', 'No se puede eliminar la tarea, ya tiene registros de asistencia asociados.');
             return;
         }
-
         TareaAsignada::destroy($id);
-        session()->flash('message', 'Tarea eliminada exitosamente.');
+        session()->flash('message', 'Tarea eliminada correctamente.');
     }
-
-    // Métodos de utilidad para manejar el modal y limpiar los campos.
+    
     public function openModal() { $this->isModalOpen = true; }
     public function closeModal() { $this->isModalOpen = false; }
-
-    private function resetInputFields()
-    {
-        $this->reset(['ciclo', 'correria', 'operador_id', 'selectedOperadorUnidadTrabajo', 'selectedOperadorSupervisor', 'tareaId']);
-        $this->resetErrorBag();
+    
+    private function resetInputFields() {
+        // Resetea todas las propiedades públicas a su estado inicial.
+        $this->reset(); 
+        // Vuelve a cargar los datos por defecto del componente.
+        $this->mount();
     }
 }

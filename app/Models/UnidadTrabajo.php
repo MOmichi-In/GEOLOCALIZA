@@ -9,18 +9,35 @@ class UnidadTrabajo extends Model
 {
     use HasFactory;
 
-    protected $table = 'unidad_trabajos'; // Asegúrate que el nombre de la tabla es correcto
+    /**
+     * El nombre de la tabla en la base de datos.
+     */
+    protected $table = 'unidad_trabajos';
 
+    /**
+     * Los atributos que se pueden asignar de forma masiva.
+     * Nos aseguramos de que 'supervisor_id' esté aquí.
+     */
     protected $fillable = [
         'nombre',
+        'supervisor_id',
     ];
 
     /**
-     * Obtener los usuarios asociados a esta unidad de trabajo.
+     * RELACIÓN: Una unidad de trabajo pertenece a UN supervisor.
      */
-    public function users()
+    public function supervisor()
     {
-        // Asume que en tu modelo User tienes una columna 'unidad_trabajo_id'
+        return $this->belongsTo(User::class, 'supervisor_id');
+    }
+
+    /**
+     * RELACIÓN: Una unidad de trabajo puede tener MUCHOS operadores asignados.
+     */
+    public function operadores()
+    {
+        // Esta relación busca en la tabla 'users' a todos aquellos
+        // cuya columna 'unidad_trabajo_id' coincide con el 'id' de esta unidad.
         return $this->hasMany(User::class, 'unidad_trabajo_id');
     }
 }

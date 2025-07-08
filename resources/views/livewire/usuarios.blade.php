@@ -1,5 +1,4 @@
 <div>
-
     <x-slot name="header">
         <h2 class="font-semibold text-xl text-gray-900 leading-tight">
             {{ __('Gestión de usuarios') }}
@@ -7,6 +6,7 @@
     </x-slot>
 
     @if (session()->has('message'))
+        <!-- Mensaje de éxito -->
         <div class="bg-green-100 border border-green-400 text-green-700 px-4 py-3 rounded mb-6 flex items-center">
             <svg class="w-5 h-5 mr-2" fill="currentColor" viewBox="0 0 20 20">
                 <path fill-rule="evenodd"
@@ -14,6 +14,16 @@
                     clip-rule="evenodd"></path>
             </svg>
             {{ session('message') }}
+        </div>
+    @endif
+    @if (session()->has('error'))
+        <!-- Mensaje de error -->
+        <div class="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded mb-6 flex items-center">
+            <svg class="w-6 h-6 mr-2" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                    d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"></path>
+            </svg>
+            {{ session('error') }}
         </div>
     @endif
 
@@ -41,7 +51,14 @@
                         <tr class="hover:bg-gray-50">
                             <td class="px-6 py-3">{{ $usuario->name }}</td>
                             <td class="px-6 py-3">{{ $usuario->email }}</td>
-                            <td class="px-6 py-3">{{ str_replace('_', ' ', $usuario->rol ?? 'Sin rol') }}</td>
+                            <td class="px-6 py-3">
+                                <span class="block">{{ str_replace('_', ' ', $usuario->rol ?? 'Sin rol') }}</span>
+                                @if ($usuario->rol === \App\Models\User::ROLE_SUPERVISOR && $usuario->codigo_supervisor)
+                                    <span class="text-xs bg-red-100 text-red-800 font-bold px-2 py-1 rounded">
+                                        CÓDIGO: {{ $usuario->codigo_supervisor }}
+                                    </span>
+                                @endif
+                            </td>
                             <td class="px-6 py-3 text-center">
                                 <div class="flex justify-center gap-2">
                                     <button wire:click="editar({{ $usuario->id }})"
@@ -66,6 +83,8 @@
                 </tbody>
             </table>
         </div>
+
+        <div class="mt-4">{{ $usuarios->links() }}</div>
     </div>
 
     @if ($modalVisible)
@@ -130,5 +149,4 @@
             </div>
         </div>
     @endif
-
 </div>

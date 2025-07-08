@@ -2,30 +2,22 @@
 
 namespace App\Models;
 
-// use Illuminate\Contracts\Auth\MustVerifyEmail; // Descomenta si usas verificación de email
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
-// Asegúrate de tener Hash si no usas el cast 'hashed' y tienes un mutador setPasswordAttribute
-// use Illuminate\Support\Facades\Hash;
 
-class User extends Authenticatable // implements MustVerifyEmail (si lo usas)
+class User extends Authenticatable
 {
     use HasFactory, Notifiable;
 
     /**
-     * Los roles definidos para el sistema.
-     * Estos strings deben coincidir con los valores que guardarás/usas en la columna 'rol' de tu tabla 'users'.
+     * Definición de roles para evitar errores de tipeo.
      */
     public const ROLE_LIDER_PROYECTO_ANALISTA = 'Analista';
     public const ROLE_SUPERVISOR = 'Supervisor';
     public const ROLE_OPERADOR_LOGISTICO = 'Operador_Logístico';
     public const ROLE_COORDINADOR_ADMINISTRATIVO = 'Coordinador_Administrativo';
 
-    /**
-     * Un array con todos los roles disponibles.
-     * Útil para generar selectores en formularios de creación/edición de usuarios.
-     */
     public static array $availableRoles = [
         self::ROLE_LIDER_PROYECTO_ANALISTA,
         self::ROLE_SUPERVISOR,
@@ -34,35 +26,20 @@ class User extends Authenticatable // implements MustVerifyEmail (si lo usas)
     ];
 
     /**
-     * The attributes that are mass assignable.
-     *
-     * @var array<int, string>
+     * Atributos que se pueden asignar masivamente.
+     * supervisor_id no está aquí porque la relación es indirecta.
      */
     protected $fillable = [
         'name',
         'email',
         'password',
-        'rol', // Esta columna almacenará uno de los strings de las constantes de rol
+        'rol',
+        'codigo_supervisor',
         'unidad_trabajo_id',
-        'supervisor_id',
     ];
 
-    // Añade la relación
-    public function supervisor()
-    {
-        return $this->belongsTo(User::class, 'supervisor_id');
-    }
-
-    // También es útil tener la relación inversa
-    public function operadoresASuCargo()
-    {
-        return $this->hasMany(User::class, 'supervisor_id');
-    }
-
     /**
-     * The attributes that should be hidden for serialization.
-     *
-     * @var array<int, string>
+     * Atributos ocultos para serialización.
      */
     protected $hidden = [
         'password',
@@ -70,36 +47,43 @@ class User extends Authenticatable // implements MustVerifyEmail (si lo usas)
     ];
 
     /**
-     * Get the attributes that should be cast.
-     *
-     * @return array<string, string>
+     * Conversiones de tipos de atributos.
      */
     protected function casts(): array
     {
         return [
             'email_verified_at' => 'datetime',
-            'password' => 'hashed', // Laravel se encarga de hashear automáticamente
+            'password' => 'hashed',
         ];
     }
+    
+    // ================================================================
+    //                     RELACIONES ELOQUENT
+    // ================================================================
 
     /**
-     * Relación con Unidad de Trabajo.
+     * RELACIÓN: Un Operador pertenece a UNA Unidad de Trabajo.
+     * Esto nos permite hacer $operador->unidadTrabajo
      */
     public function unidadTrabajo()
     {
         return $this->belongsTo(UnidadTrabajo::class, 'unidad_trabajo_id');
     }
 
-    // Puedes añadir aquí otras relaciones si las necesitas con frecuencia,
-    // por ejemplo, si un supervisor tiene muchas asistencias registradas por él:
-    // public function asistenciasRegistradas()
-    // {
-    //     return $this->hasMany(RegistroAsistencia::class, 'registrado_por');
-    // }
-
-    // Si un operador tiene muchas tareas asignadas:
-    // public function tareasAsignadas()
-    // {
-    //     return $this->hasMany(TareaAsignada::class, 'operador_id');
-    // }
+    /**
+     * RELACIÓN CLAVE: Obtener el supervisor del operador A TRAVÉS de la unidad de trabajo.
+     * Esta es la única fuente de verdad para el supervisor.
+     * Nos permite hacer $operador->supervisor
+     */
+    public function supervisor()
+    {
+        return $this->hasOneThrough(
+            User::class,            // Modelo final: Supervisor (User)
+            UnidadTrabajo::class,   // Modelo intermedio: Unidad de Trabajo
+            'id',                   // Llave en UnidadTrabajo que se relaciona con User (supervisor)
+            'id',                   // Llave en User (supervisor) que se relaciona con UnidadTrabajo
+            'unidad_trabajo_id',    // Llave local en este modelo (User/Operador)
+            'supervisor_id'         // Llave foránea en el modelo intermedio (UnidadTrabajo)
+        )->where('users.rol', self::ROLE_SUPERVISOR); // Filtro extra de seguridad
+    }
 }
