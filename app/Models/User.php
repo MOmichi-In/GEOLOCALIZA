@@ -15,7 +15,7 @@ class User extends Authenticatable
      */
     public const ROLE_LIDER_PROYECTO_ANALISTA = 'Analista';
     public const ROLE_SUPERVISOR = 'Supervisor';
-    public const ROLE_OPERADOR_LOGISTICO = 'Operador_Logístico';
+    public const ROLE_OPERADOR_LOGISTICO = 'Operador_Logistico';
     public const ROLE_COORDINADOR_ADMINISTRATIVO = 'Coordinador_Administrativo';
 
     public static array $availableRoles = [
