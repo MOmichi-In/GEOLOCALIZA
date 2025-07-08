@@ -48,6 +48,7 @@
                 @endif
 
                 @if (Auth::user()->rol === \App\Models\User::ROLE_COORDINADOR_ADMINISTRATIVO)
+                
                     <!-- Asignar Tareas -->
                     <a href="{{ route('tasks.assign') }}"
                         class="flex items-center px-4 py-3 text-sm font-medium rounded-lg transition-all duration-200 group
@@ -83,7 +84,7 @@
                 <!-- Usuarios -->
                 <a href="{{ route('users') }}"
                     class="flex items-center px-4 py-3 text-sm font-medium rounded-lg transition-all duration-200 group
-        {{ request()->routeIs('usuarios')
+        {{ request()->routeIs('users')
             ? 'bg-red-900 text-white shadow-inner border-r-4 border-red-300'
             : 'text-red-100 hover:text-white hover:bg-red-600' }}">
 

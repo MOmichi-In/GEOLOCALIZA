@@ -1,7 +1,7 @@
-@props(['width' => 200, 'height' => 250, 'class' => ''])
+@props(['width' => 100, 'height' => 100, 'class' => ''])
 
 <img
-    src="{{ asset('images/blanc2.svg')}}"
+    src="{{ asset('images/blanco.svg')}}"
     width="{{ $width }}"
     height="{{ $height }}"
     class="{{ $class }}"
