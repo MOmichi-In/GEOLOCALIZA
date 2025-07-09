@@ -27,13 +27,13 @@ class User extends Authenticatable
 
     /**
      * Atributos que se pueden asignar masivamente.
-     * supervisor_id no está aquí porque la relación es indirecta.
      */
     protected $fillable = [
         'name',
         'email',
         'password',
         'rol',
+        'cedula', // <-- ¡AQUÍ ESTÁ EL CAMBIO!
         'codigo_supervisor',
         'unidad_trabajo_id',
     ];
@@ -78,12 +78,12 @@ class User extends Authenticatable
     public function supervisor()
     {
         return $this->hasOneThrough(
-            User::class,            // Modelo final: Supervisor (User)
-            UnidadTrabajo::class,   // Modelo intermedio: Unidad de Trabajo
-            'id',                   // Llave en UnidadTrabajo que se relaciona con User (supervisor)
-            'id',                   // Llave en User (supervisor) que se relaciona con UnidadTrabajo
-            'unidad_trabajo_id',    // Llave local en este modelo (User/Operador)
-            'supervisor_id'         // Llave foránea en el modelo intermedio (UnidadTrabajo)
-        )->where('users.rol', self::ROLE_SUPERVISOR); // Filtro extra de seguridad
+            User::class,
+            UnidadTrabajo::class,
+            'id',
+            'id',
+            'unidad_trabajo_id',
+            'supervisor_id'
+        )->where('users.rol', self::ROLE_SUPERVISOR);
     }
 }

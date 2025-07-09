@@ -65,15 +65,15 @@
                         <span>{{ __('Asignar Tareas') }}</span>
                     </a>
 
-                    <a href="{{ route('supervisor.dashboard') }}"
+                    <a href="{{ route('panel.tareas') }}"
                         class="flex items-center px-4 py-3 text-sm font-medium rounded-lg transition-all duration-200 group
-        {{ request()->routeIs('supervisor.dashboard')
+        {{ request()->routeIs('panel.tareas')
             ? 'bg-red-900 text-white shadow-inner border-r-4 border-red-300'
             : 'text-red-100 hover:text-white hover:bg-red-600' }}">
 
                         <span
                             class="material-symbols-outlined text-xl mr-3 
-        {{ request()->routeIs('supervisor.dashboard') ? 'text-red-300' : 'text-red-200 group-hover:text-white' }}">
+        {{ request()->routeIs('panel.tareas') ? 'text-red-300' : 'text-red-200 group-hover:text-white' }}">
                             supervisor_account
                         </span>
 
@@ -82,9 +82,24 @@
                 @endif
 
                 <!-- Usuarios -->
-                <a href="{{ route('users') }}"
+                <a href="{{ route('users.index') }}"
                     class="flex items-center px-4 py-3 text-sm font-medium rounded-lg transition-all duration-200 group
         {{ request()->routeIs('users')
+            ? 'bg-red-900 text-white shadow-inner border-r-4 border-red-300'
+            : 'text-red-100 hover:text-white hover:bg-red-600' }}">
+
+                    <span
+                        class="material-symbols-outlined text-xl mr-3 
+        {{ request()->routeIs('users.index') ? 'text-red-300' : 'text-red-200 group-hover:text-white' }}">
+                        groups
+                    </span>
+
+                    <span>{{ __('Usuarios') }}</span>
+                </a>
+                {{-- Actividades --}}
+                <a href="{{ route('actividades.index') }}"
+                    class="flex items-center px-4 py-3 text-sm font-medium rounded-lg transition-all duration-200 group
+        {{ request()->routeIs('actividades.index')
             ? 'bg-red-900 text-white shadow-inner border-r-4 border-red-300'
             : 'text-red-100 hover:text-white hover:bg-red-600' }}">
 
@@ -94,12 +109,41 @@
                         groups
                     </span>
 
-                    <span>{{ __('Usuarios') }}</span>
+                    <span>{{ __('Actividades') }}</span>
                 </a>
-
             </div>
-        </nav>
+            {{-- ciclos --}}
+            <a href="{{ route('ciclos.index') }}"
+                class="flex items-center px-4 py-3 text-sm font-medium rounded-lg transition-all duration-200 group
+        {{ request()->routeIs('ciclos.index')
+            ? 'bg-red-900 text-white shadow-inner border-r-4 border-red-300'
+            : 'text-red-100 hover:text-white hover:bg-red-600' }}">
 
+                <span
+                    class="material-symbols-outlined text-xl mr-3 
+        {{ request()->routeIs('ciclos.index') ? 'text-red-300' : 'text-red-200 group-hover:text-white' }}">
+                    groups
+                </span>
+
+                <span>{{ __('Ciclos') }}</span>
+            </a>
+            {{-- correrias --}}
+            <a href="{{ route('correrias.index') }}"
+                class="flex items-center px-4 py-3 text-sm font-medium rounded-lg transition-all duration-200 group
+        {{ request()->routeIs('correrias.index')
+            ? 'bg-red-900 text-white shadow-inner border-r-4 border-red-300'
+            : 'text-red-100 hover:text-white hover:bg-red-600' }}">
+
+                <span
+                    class="material-symbols-outlined text-xl mr-3 
+        {{ request()->routeIs('correrias.index') ? 'text-red-300' : 'text-red-200 group-hover:text-white' }}">
+                    groups
+                </span>
+
+                <span>{{ __('Correrias') }}</span>
+            </a>
+        </nav>
+         
         <!-- User Profile Section -->
         <div class="absolute bottom-0 left-0 right-0 p-4 bg-red-800 border-t border-red-900">
             <div x-data="{ profileOpen: false }" class="relative">
