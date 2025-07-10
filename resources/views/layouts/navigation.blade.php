@@ -6,13 +6,13 @@
         class="fixed inset-y-0 left-0 z-50 w-64 bg-gradient-to-b from-red-700 to-red-800 shadow-xl transform transition-transform duration-300 ease-in-out lg:translate-x-0">
 
         <!-- Logo Section -->
-        <div class="flex justify-center items-center p-4 sm:p-8">
+        <div class="flex justify-center items-center p-4 sm:p-5">
             <x-application-logo class="w-auto h-12 sm:h-16" />
         </div>
         {{-- // --}}
         <!-- Navigation Menu -->
-        <nav class="mt-8 px-4">
-            <div class="space-y-2">
+        <nav class="mt-1 px-1">
+            <div class="space-y-1">
                 <!-- Dashboard -->
                 <a href="{{ route('dashboard') }}"
                     class="flex items-center px-4 py-3 text-sm font-medium rounded-lg transition-all duration-200 group
