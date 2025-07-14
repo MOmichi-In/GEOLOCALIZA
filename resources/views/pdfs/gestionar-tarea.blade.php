@@ -52,7 +52,8 @@
     }
 
     .content-wrapper {
-        padding-bottom: 180px; /* Espacio para las firmas en el pie */
+        padding-bottom: 180px;
+        /* Espacio para las firmas en el pie */
     }
 
     .bold {
@@ -162,7 +163,8 @@
     /* Estilos para firmas en el pie del documento */
     .signature-section {
         position: absolute;
-        bottom: 60px; /* Espacio para el footer */
+        bottom: 60px;
+        /* Espacio para el footer */
         left: 20px;
         right: 20px;
         page-break-inside: avoid;
@@ -182,12 +184,14 @@
         padding: 0 15px;
         box-sizing: border-box;
         border: none;
-        height: 100px; /* Altura fija para cada celda */
+        height: 100px;
+        /* Altura fija para cada celda */
     }
 
     .signature-container {
         position: relative;
-        height: 80px; /* Altura del contenedor de firma */
+        height: 80px;
+        /* Altura del contenedor de firma */
         display: flex;
         flex-direction: column;
         justify-content: flex-end;
@@ -198,7 +202,8 @@
         max-height: 40px;
         height: auto;
         display: block;
-        margin: 0 auto 5px auto; /* Pequeño margen arriba de la línea */
+        margin: 0 auto 5px auto;
+        /* Pequeño margen arriba de la línea */
         background: transparent;
         position: relative;
         z-index: 1;
@@ -241,14 +246,14 @@
             margin: 0;
             padding: 0;
         }
-        
+
         .signature-section {
             position: fixed;
             bottom: 60px;
             left: 20px;
             right: 20px;
         }
-        
+
         .footer-text {
             position: fixed;
             bottom: 20px;
@@ -278,10 +283,10 @@
         <table style="width: 100%; border-collapse: collapse; margin-bottom: 20px; font-size: 10pt;">
             <tr>
                 <!-- Columna Logo -->
-                <td rowspan="2" style="width: 25%; border: 1px solid black; text-align: center; vertical-align: middle;">
+                <td rowspan="2"
+                    style="width: 25%; border: 1px solid black; text-align: center; vertical-align: middle;">
                     @if ($logo)
-                        <img src="{{ $logo }}" alt="Logo RIB"
-                            style="max-width: 100px; height: auto;">
+                        <img src="{{ $logo }}" alt="Logo RIB" style="max-width: 100px; height: auto;">
                     @else
                         <span>Logo RIB</span>
                     @endif
@@ -351,17 +356,19 @@
             </tr>
             <tr>
                 <td class="data-label">Fecha de Inicio:</td>
-                <td>{{ $tarea->fecha_inicio->format('d/m/Y') }}</td>
+                <td>{{ $tarea->fecha_inicio->format('d/m/Y h:i A') }}</td>
             </tr>
             <tr>
                 <td class="data-label">Fecha de Entrega:</td>
-                <td>{{ optional($tarea->fecha_entrega)->format('d/m/Y') ?? 'Pendiente' }}</td>
+                <td>{{ $tarea->fecha_entrega ? $tarea->fecha_entrega->format('d/m/Y h:i A') : 'Pendiente' }}</td>
             </tr>
+
+
             <tr>
                 <td class="data-label">Estado:</td>
                 {{-- para ti que estas corrigiendo el pdf, puse un estado intermedio por si en algun momento se necesita --}}
                 <td>
-                    @if($tarea->estado == 'completado')
+                    @if ($tarea->estado == 'completado')
                         <span class="status-badge status-completado">{{ ucfirst($tarea->estado) }}</span>
                     @elseif($tarea->estado == 'en_proceso')
                         <span class="status-badge status-en-proceso">En Proceso</span>
@@ -377,7 +384,8 @@
         </table>
 
         <div class="footer-text">
-            Este documento es confidencial y para uso exclusivo de la organización. Generado el: {{ now()->format('d/m/Y H:i:s') }}
+            Este documento es confidencial y para uso exclusivo de la organización. Generado el:
+            {{ now()->format('d/m/Y H:i:s') }}
         </div>
     </div>
 
@@ -387,7 +395,7 @@
             <tr>
                 <td>
                     <div class="signature-container">
-                        @if($tarea->firma_inicio)
+                        @if ($tarea->firma_inicio)
                             <img src="{{ $tarea->firma_inicio }}" alt="Firma Inicio" class="signature-img">
                         @endif
                         <div class="signature-line"></div>
@@ -399,7 +407,7 @@
                 </td>
                 <td>
                     <div class="signature-container">
-                        @if($tarea->firma_final)
+                        @if ($tarea->firma_final)
                             <img src="{{ $tarea->firma_final }}" alt="Firma Final" class="signature-img">
                         @endif
                         <div class="signature-line"></div>
@@ -411,7 +419,7 @@
                 </td>
                 <td>
                     <div class="signature-container">
-                        @if($tarea->firma_supervisor)
+                        @if ($tarea->firma_supervisor)
                             <img src="{{ $tarea->firma_supervisor }}" alt="Firma Supervisor" class="signature-img">
                         @endif
                         <div class="signature-line"></div>
@@ -426,7 +434,8 @@
     </div>
 
     <div class="footer-text">
-        Este documento es confidencial y para uso exclusivo de la organización. Generado el: {{ now()->format('d/m/Y H:i:s') }}
+        Este documento es confidencial y para uso exclusivo de la organización. Generado el:
+        {{ now()->format('d/m/Y H:i:s') }}
     </div>
 </body>
 

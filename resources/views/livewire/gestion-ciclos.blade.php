@@ -62,8 +62,8 @@
                                     <td class="px-6 py-4 whitespace-nowrap">{{ $ciclo->nombre }}</td>
                                     <td class="px-6 py-4 whitespace-nowrap text-center">
                                         <div class="flex justify-center gap-2">
-                                            <button wire:click="editar({{ $ciclo->id }})"
-                                                class="bg-gray-400 hover:bg-gray-600 text-white px-3 py-1 rounded">Editar</button>
+                                            {{-- <button wire:click="editar({{ $ciclo->id }})"
+                                                class="bg-gray-400 hover:bg-gray-600 text-white px-3 py-1 rounded">Editar</button> --}}
                                             <button wire:click="eliminar({{ $ciclo->id }})"
                                                 class="bg-red-800 hover:bg-red-700 text-white px-3 py-1 rounded">Eliminar</button>
                                         </div>

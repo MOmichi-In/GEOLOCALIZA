@@ -6,6 +6,7 @@ use App\Models\User;
 use Livewire\Component;
 use App\Models\TareaAsignada;
 use Barryvdh\DomPDF\Facade\Pdf;
+use Carbon\Carbon;
 
 class GestionarTarea extends Component
 {
@@ -16,6 +17,9 @@ class GestionarTarea extends Component
     public $fecha_entrega;
     public $observaciones;
     public $estado_tarea;
+
+    public $datosModificados = false;
+
 
     // --- FIRMAS ---
     public $firma_inicio_data;
@@ -30,7 +34,7 @@ class GestionarTarea extends Component
     protected function rules()
     {
         return [
-            'fecha_entrega' => 'required|date|after_or_equal:tarea.fecha_inicio',
+            'fecha_entrega' => 'required|date',
             'observaciones' => 'nullable|string',
             'firma_inicio_data' => 'required_without:tarea.firma_inicio',
             'firma_final_data' => 'required_without:tarea.firma_final',
@@ -38,10 +42,19 @@ class GestionarTarea extends Component
         ];
     }
 
+
+
+
     protected $messages = [
         'required_without' => 'Se requiere una firma para finalizar.',
         'fecha_entrega.after_or_equal' => 'La fecha de entrega no puede ser anterior a la de inicio.'
     ];
+
+
+    public function updated($property)
+    {
+        $this->datosModificados = true;
+    }
 
     public function mount(TareaAsignada $tarea)
     {
@@ -85,8 +98,15 @@ class GestionarTarea extends Component
     {
         $this->validate();
 
+        $this->dispatch('tareaFinalizada');
+
+        if ($this->tarea->fecha_inicio && $this->fecha_entrega < $this->tarea->fecha_inicio->format('Y-m-d')) {
+            $this->addError('fecha_entrega', 'La fecha de entrega no puede ser anterior a la fecha de inicio.');
+            return;
+        }
+
         $this->tarea->update([
-            'fecha_entrega' => $this->fecha_entrega,
+            'fecha_entrega' => now(),
             'observaciones' => $this->observaciones,
             'estado' => 'Finalizada',
             'firma_inicio' => $this->firma_inicio_data,
@@ -98,16 +118,26 @@ class GestionarTarea extends Component
         return $this->redirect(route('panel.tareas'), navigate: true);
     }
 
+
+
     /**
      * Guarda sin finalizar la tarea (no cambia el estado).
      */
     public function guardarTarea()
     {
+        $this->dispatch('tareaGuardada');
+
         $this->validate([
-            'fecha_entrega' => 'required|date|after_or_equal:tarea.fecha_inicio',
+            'fecha_entrega' => 'required|date',
             'observaciones' => 'nullable|string',
-            // Las firmas no son requeridas aquí
         ]);
+
+        if ($this->tarea->fecha_inicio && $this->fecha_entrega < $this->tarea->fecha_inicio->format('Y-m-d')) {
+            $this->addError('fecha_entrega', 'La fecha de entrega no puede ser anterior a la fecha de inicio.');
+            return;
+        }
+
+
 
         $this->tarea->update([
             'fecha_entrega' => $this->fecha_entrega,
@@ -115,14 +145,21 @@ class GestionarTarea extends Component
             'firma_inicio' => $this->firma_inicio_data,
             'firma_final' => $this->firma_final_data,
             'firma_supervisor' => $this->firma_supervisor_data,
-            // NO cambia el estado
         ]);
+
+        $this->datosModificados = false;
 
         session()->flash('message', 'Cambios guardados correctamente.');
     }
 
+
     public function descargarPdf()
     {
+        if ($this->tarea->estado !== 'Finalizada') {
+            session()->flash('error', 'Solo puedes descargar el PDF cuando la tarea esté finalizada.');
+            return;
+        }
+
         $tarea = $this->tarea;
         $pdf = Pdf::loadView('pdfs.gestionar-tarea', compact('tarea'))
             ->setPaper('a4', 'portrait');
@@ -131,4 +168,5 @@ class GestionarTarea extends Component
             "tarea_{$tarea->id}.pdf"
         );
     }
+
 }

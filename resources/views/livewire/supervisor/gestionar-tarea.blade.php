@@ -132,7 +132,7 @@
                         </div>
                     </div>
 
-                  
+
                     {{-- Ahora empieza el bloque de botones FUERA del formulario --}}
                     <div class="flex justify-end mt-8 border-t pt-6 space-x-4">
                         <a href="{{ route('panel.tareas') }}"
@@ -140,20 +140,48 @@
                             Volver al Panel
                         </a>
 
-                        <button type="button" wire:click="guardarTarea"
-                            class="bg-blue-600 hover:bg-blue-700 text-white px-6 py-3 rounded-lg font-semibold transition">
-                            Guardar
-                        </button>
+                        @if ($tarea->estado === 'Finalizada')
+                            <button disabled
+                                class="bg-blue-600 text-white px-6 py-3 rounded-lg font-semibold opacity-50 cursor-not-allowed">
+                                Guardar
+                            </button>
+                        @else
+                            <button type="button" wire:click="guardarTarea"
+                                class="bg-blue-600 hover:bg-blue-700 text-white px-6 py-3 rounded-lg font-semibold transition">
+                                Guardar
+                            </button>
+                        @endif
 
-                        <button type="button" wire:click="finalizarTarea"
-                            class="bg-red-700 hover:bg-red-800 text-white px-6 py-3 rounded-lg font-semibold transition">
-                            Finalizar Tarea
-                        </button>
 
-                        <button type="button" wire:click="descargarPdf"
-                            class="bg-indigo-700 hover:bg-indigo-800 text-white px-6 py-3 rounded-lg font-semibold transition">
-                            Descargar PDF
-                        </button>
+                        @if ($tarea->estado === 'Finalizada')
+                            <button disabled
+                                class="bg-red-700 text-white px-6 py-3 rounded-lg font-semibold opacity-50 cursor-not-allowed">
+                                Tarea ya Finalizada
+                            </button>
+                        @else
+                            <button type="button" wire:click="finalizarTarea"
+                                class="bg-red-700 hover:bg-red-800 text-white px-6 py-3 rounded-lg font-semibold transition">
+                                Finalizar Tarea
+                            </button>
+                        @endif
+
+
+
+
+
+
+                        @if ($tarea->estado === 'Finalizada')
+                            <button type="button" wire:click="descargarPdf"
+                                class="bg-indigo-700 hover:bg-indigo-800 text-white px-6 py-3 rounded-lg font-semibold transition">
+                                Descargar PDF
+                            </button>
+                        @else
+                            <button disabled
+                                class="bg-indigo-700 text-white px-6 py-3 rounded-lg font-semibold opacity-50 cursor-not-allowed">
+                                Finaliza la tarea para descargar PDF
+                            </button>
+                        @endif
+
                     </div>
                 </div>
             </form>
@@ -172,8 +200,7 @@
                 <div class="flex justify-between mt-4 space-x-2">
                     <button type="button" @click="clearPad"
                         class="bg-gray-400 text-white px-4 py-2 rounded w-full">Limpiar</button>
-                    <button type="button" @click="save"
-                        class="bg-red-700 text-white px-4 py-2 rounded w-full">Guardar
+                    <button type="button" @click="save" class="bg-red-700 text-white px-4 py-2 rounded w-full">Guardar
                         Firma</button>
                     <button type="button" @click="$wire.set('modalFirmaVisible', false)"
                         class="bg-gray-600 text-white px-4 py-2 rounded w-full">Cancelar</button>
@@ -216,4 +243,19 @@
             }
         }
     </script>
+@endpush
+
+@push('scripts')
+<script>
+    Livewire.on('tareaGuardada', () => {
+        alert('✅ Cambios guardados exitosamente.');
+    });
+
+    Livewire.on('tareaFinalizada', () => {
+        alert('✅ Tarea finalizada correctamente.');
+
+        // Refrescar la página para reflejar estado actualizado si quieres:
+        location.reload();
+    });
+</script>
 @endpush

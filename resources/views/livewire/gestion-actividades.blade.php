@@ -58,8 +58,8 @@
                                     <td class="px-6 py-4 whitespace-nowrap">{{ $actividad->nombre }}</td>
                                     <td class="px-6 py-4 whitespace-nowrap text-center">
                                         <div class="flex justify-center gap-2">
-                                            <button wire:click="editar({{ $actividad->id }})"
-                                                class="bg-gray-400 hover:bg-gray-600 text-white px-3 py-1 rounded">Editar</button>
+                                            {{-- <button wire:click="editar({{ $actividad->id }})"
+                                                class="bg-gray-400 hover:bg-gray-600 text-white px-3 py-1 rounded">Editar</button> --}}
                                             <button wire:click="eliminar({{ $actividad->id }})"
                                                 wire:confirm="¿Estás seguro de eliminar esta actividad?"
                                                 class="bg-red-800 hover:bg-red-700 text-white px-3 py-1 rounded">Eliminar</button>
