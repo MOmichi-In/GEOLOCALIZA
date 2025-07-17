@@ -47,8 +47,8 @@
                     </a>
                 @endif
 
-                @if (Auth::user()->rol === \App\Models\User::ROLE_COORDINADOR_ADMINISTRATIVO)
-                
+                 @if (Auth::user()->rol === 'Coordinador_Administrativo' ||'Supervisor')
+
                     <!-- Asignar Tareas -->
                     <a href="{{ route('tasks.assign') }}"
                         class="flex items-center px-4 py-3 text-sm font-medium rounded-lg transition-all duration-200 group
@@ -99,51 +99,66 @@
                 {{-- Actividades --}}
                 <a href="{{ route('actividades.index') }}"
                     class="flex items-center px-4 py-3 text-sm font-medium rounded-lg transition-all duration-200 group
-        {{ request()->routeIs('actividades.index')
+    {{ request()->routeIs('actividades.index')
+        ? 'bg-red-900 text-white shadow-inner border-r-4 border-red-300'
+        : 'text-red-100 hover:text-white hover:bg-red-600' }}">
+
+                    <span
+                        class="material-symbols-outlined text-xl mr-3 
+    {{ request()->routeIs('actividades.index') ? 'text-red-300' : 'text-red-200 group-hover:text-white' }}">
+                        today
+                    </span>
+
+                    <span>{{ __('Actividades') }}</span>
+                </a>
+
+                {{-- ciclos --}}
+                <a href="{{ route('ciclos.index') }}"
+                    class="flex items-center px-4 py-3 text-sm font-medium rounded-lg transition-all duration-200 group
+        {{ request()->routeIs('ciclos.index')
             ? 'bg-red-900 text-white shadow-inner border-r-4 border-red-300'
             : 'text-red-100 hover:text-white hover:bg-red-600' }}">
 
                     <span
                         class="material-symbols-outlined text-xl mr-3 
-        {{ request()->routeIs('users') ? 'text-red-300' : 'text-red-200 group-hover:text-white' }}">
+        {{ request()->routeIs('ciclos.index') ? 'text-red-300' : 'text-red-200 group-hover:text-white' }}">
                         groups
                     </span>
 
-                    <span>{{ __('Actividades') }}</span>
+                    <span>{{ __('Ciclos') }}</span>
                 </a>
-            </div>
-            {{-- ciclos --}}
-            <a href="{{ route('ciclos.index') }}"
-                class="flex items-center px-4 py-3 text-sm font-medium rounded-lg transition-all duration-200 group
-        {{ request()->routeIs('ciclos.index')
-            ? 'bg-red-900 text-white shadow-inner border-r-4 border-red-300'
-            : 'text-red-100 hover:text-white hover:bg-red-600' }}">
-
-                <span
-                    class="material-symbols-outlined text-xl mr-3 
-        {{ request()->routeIs('ciclos.index') ? 'text-red-300' : 'text-red-200 group-hover:text-white' }}">
-                    groups
-                </span>
-
-                <span>{{ __('Ciclos') }}</span>
-            </a>
-            {{-- correrias --}}
-            <a href="{{ route('correrias.index') }}"
-                class="flex items-center px-4 py-3 text-sm font-medium rounded-lg transition-all duration-200 group
+                {{-- correrias --}}
+                <a href="{{ route('correrias.index') }}"
+                    class="flex items-center px-4 py-3 text-sm font-medium rounded-lg transition-all duration-200 group
         {{ request()->routeIs('correrias.index')
             ? 'bg-red-900 text-white shadow-inner border-r-4 border-red-300'
             : 'text-red-100 hover:text-white hover:bg-red-600' }}">
 
-                <span
-                    class="material-symbols-outlined text-xl mr-3 
+                    <span
+                        class="material-symbols-outlined text-xl mr-3 
         {{ request()->routeIs('correrias.index') ? 'text-red-300' : 'text-red-200 group-hover:text-white' }}">
-                    groups
-                </span>
+                        groups
+                    </span>
 
-                <span>{{ __('Correrias') }}</span>
-            </a>
+                    <span>{{ __('Correrias') }}</span>
+                </a>
         </nav>
-         
+{{-- 
+        <a href="{{ route('Registros.index') }}"
+            class="flex items-center px-4 py-3 text-sm font-medium rounded-lg transition-all duration-200 group
+    {{ request()->routeIs('Registros.index')
+        ? 'bg-red-900 text-white shadow-inner border-r-4 border-red-300'
+        : 'text-red-100 hover:text-white hover:bg-red-600' }}">
+
+            <span
+                class="material-symbols-outlined text-xl mr-3 
+    {{ request()->routeIs('Registros.index') ? 'text-red-300' : 'text-red-200 group-hover:text-white' }}">
+                fact_check
+            </span>
+
+            <span>{{ __('Registros') }}</span>
+        </a> --}}
+
         <!-- User Profile Section -->
         <div class="absolute bottom-0 left-0 right-0 p-4 bg-red-800 border-t border-red-900">
             <div x-data="{ profileOpen: false }" class="relative">
