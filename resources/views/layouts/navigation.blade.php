@@ -48,7 +48,6 @@
                 @endif
 
                  @if (Auth::user()->rol === 'Coordinador_Administrativo' ||'Supervisor')
-
                     <!-- Asignar Tareas -->
                     <a href="{{ route('tasks.assign') }}"
                         class="flex items-center px-4 py-3 text-sm font-medium rounded-lg transition-all duration-200 group
