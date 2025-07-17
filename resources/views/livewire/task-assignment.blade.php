@@ -92,8 +92,10 @@
                                     <div class="flex justify-center gap-2">
                                         <button wire:click="edit({{ $tarea->id }})"
                                             class="bg-gray-400 hover:bg-gray-600 text-white px-3 py-1 rounded">Editar</button>
+                                               @if (Auth::user()->rol === 'Coordinador_Administrativo')
                                         <button wire:click="delete({{ $tarea->id }})" wire:confirm="¿Estás seguro?"
                                             class="bg-red-800 hover:bg-red-700 text-white px-3 py-1 rounded">Eliminar</button>
+                                            @endif
                                     </div>
                                 </td>
                             </tr>
