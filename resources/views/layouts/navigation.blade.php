@@ -13,30 +13,13 @@
         <!-- Navigation Menu -->
         <nav class="mt-1 px-1">
             <div class="space-y-1">
-                <!-- Dashboard -->
-                {{-- <a href="{{ route('dashboard') }}"
-                    class="flex items-center px-4 py-3 text-sm font-medium rounded-lg transition-all duration-200 group
-        {{ request()->routeIs('dashboard')
-            ? 'bg-red-900 text-white shadow-inner border-r-4 border-red-300'
-            : 'text-red-100 hover:text-white hover:bg-red-600' }}">
 
-                    <span
-                        class="material-symbols-outlined text-xl mr-3 
-        {{ request()->routeIs('dashboard') ? 'text-red-300' : 'text-red-200 group-hover:text-white' }}">
-                        home
-                    </span>
-
-                    <span>{{ __('Inicio') }}</span>
-                </a> --}}
-
-
-                @if (Auth::user()->rol === 'Coordinador_Administrativo' || 'SUPER')
+                {{-- Coordinador Administrativo y SUPER --}}
+                @if (Auth::user()->rol === 'Coordinador_Administrativo' || Auth::user()->rol === 'SUPER')
                     <!-- Unidades de Trabajo -->
                     <a href="{{ route('unidades.index') }}"
                         class="flex items-center px-4 py-3 text-sm font-medium rounded-lg transition-all duration-200 group
-                              {{ request()->routeIs('unidades.index')
-                                  ? 'bg-red-900 text-white shadow-inner border-r-4 border-red-300'
-                                  : 'text-red-100 hover:text-white hover:bg-red-600' }}">
+                {{ request()->routeIs('unidades.index') ? 'bg-red-900 text-white shadow-inner border-r-4 border-red-300' : 'text-red-100 hover:text-white hover:bg-red-600' }}">
                         <svg class="w-5 h-5 mr-3 {{ request()->routeIs('unidades.index') ? 'text-red-300' : 'text-red-200 group-hover:text-white' }}"
                             fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
@@ -45,104 +28,89 @@
                         </svg>
                         <span>{{ __('Unidades de Trabajo') }}</span>
                     </a>
+                @endif
 
-
+                {{-- SOLO SUPER --}}
+                @if (Auth::user()->rol === 'SUPER')
                     <!-- Usuarios -->
                     <a href="{{ route('users.index') }}"
                         class="flex items-center px-4 py-3 text-sm font-medium rounded-lg transition-all duration-200 group
-        {{ request()->routeIs('users')
-            ? 'bg-red-900 text-white shadow-inner border-r-4 border-red-300'
-            : 'text-red-100 hover:text-white hover:bg-red-600' }}">
-
+                {{ request()->routeIs('users') ? 'bg-red-900 text-white shadow-inner border-r-4 border-red-300' : 'text-red-100 hover:text-white hover:bg-red-600' }}">
                         <span
                             class="material-symbols-outlined text-xl mr-3 
-        {{ request()->routeIs('users.index') ? 'text-red-300' : 'text-red-200 group-hover:text-white' }}">
+                    {{ request()->routeIs('users.index') ? 'text-red-300' : 'text-red-200 group-hover:text-white' }}">
                             groups
                         </span>
-
                         <span>{{ __('Usuarios') }}</span>
                     </a>
-                    {{-- Actividades --}}
+
+                    <!-- Actividades -->
                     <a href="{{ route('actividades.index') }}"
                         class="flex items-center px-4 py-3 text-sm font-medium rounded-lg transition-all duration-200 group
-    {{ request()->routeIs('actividades.index')
-        ? 'bg-red-900 text-white shadow-inner border-r-4 border-red-300'
-        : 'text-red-100 hover:text-white hover:bg-red-600' }}">
-
+                {{ request()->routeIs('actividades.index') ? 'bg-red-900 text-white shadow-inner border-r-4 border-red-300' : 'text-red-100 hover:text-white hover:bg-red-600' }}">
                         <span
                             class="material-symbols-outlined text-xl mr-3 
-    {{ request()->routeIs('actividades.index') ? 'text-red-300' : 'text-red-200 group-hover:text-white' }}">
+                    {{ request()->routeIs('actividades.index') ? 'text-red-300' : 'text-red-200 group-hover:text-white' }}">
                             today
                         </span>
-
                         <span>{{ __('Actividades') }}</span>
                     </a>
 
-                    {{-- ciclos --}}
+                    <!-- Ciclos -->
                     <a href="{{ route('ciclos.index') }}"
                         class="flex items-center px-4 py-3 text-sm font-medium rounded-lg transition-all duration-200 group
-        {{ request()->routeIs('ciclos.index')
-            ? 'bg-red-900 text-white shadow-inner border-r-4 border-red-300'
-            : 'text-red-100 hover:text-white hover:bg-red-600' }}">
-
+                {{ request()->routeIs('ciclos.index') ? 'bg-red-900 text-white shadow-inner border-r-4 border-red-300' : 'text-red-100 hover:text-white hover:bg-red-600' }}">
                         <span
                             class="material-symbols-outlined text-xl mr-3 
-        {{ request()->routeIs('ciclos.index') ? 'text-red-300' : 'text-red-200 group-hover:text-white' }}">
+                    {{ request()->routeIs('ciclos.index') ? 'text-red-300' : 'text-red-200 group-hover:text-white' }}">
                             groups
                         </span>
-
                         <span>{{ __('Ciclos') }}</span>
                     </a>
-                    {{-- correrias --}}
+
+                    <!-- Correrías -->
                     <a href="{{ route('correrias.index') }}"
                         class="flex items-center px-4 py-3 text-sm font-medium rounded-lg transition-all duration-200 group
-        {{ request()->routeIs('correrias.index')
-            ? 'bg-red-900 text-white shadow-inner border-r-4 border-red-300'
-            : 'text-red-100 hover:text-white hover:bg-red-600' }}">
-
+                {{ request()->routeIs('correrias.index') ? 'bg-red-900 text-white shadow-inner border-r-4 border-red-300' : 'text-red-100 hover:text-white hover:bg-red-600' }}">
                         <span
                             class="material-symbols-outlined text-xl mr-3 
-        {{ request()->routeIs('correrias.index') ? 'text-red-300' : 'text-red-200 group-hover:text-white' }}">
+                    {{ request()->routeIs('correrias.index') ? 'text-red-300' : 'text-red-200 group-hover:text-white' }}">
                             groups
                         </span>
-
-                        <span>{{ __('Correrias') }}</span>
+                        <span>{{ __('Correrías') }}</span>
                     </a>
                 @endif
 
-                @if (Auth::user()->rol === 'Coordinador_Administrativo' || 'Supervisor' || 'SUPER')
+                {{-- Coordinador_Administrativo, Supervisor y SUPER --}}
+                @if (in_array(Auth::user()->rol, ['Coordinador_Administrativo', 'Supervisor', 'SUPER']))
                     <!-- Asignar Tareas -->
                     <a href="{{ route('tasks.assign') }}"
                         class="flex items-center px-4 py-3 text-sm font-medium rounded-lg transition-all duration-200 group
-          {{ request()->routeIs('tasks.assign')
-              ? 'bg-red-900 text-white shadow-inner border-r-4 border-red-300'
-              : 'text-red-100 hover:text-white hover:bg-red-600' }}">
-
+                {{ request()->routeIs('tasks.assign') ? 'bg-red-900 text-white shadow-inner border-r-4 border-red-300' : 'text-red-100 hover:text-white hover:bg-red-600' }}">
                         <span
                             class="material-symbols-outlined text-xl mr-3 
-        {{ request()->routeIs('tasks.assign') ? 'text-red-300' : 'text-red-200 group-hover:text-white' }}">
+                    {{ request()->routeIs('tasks.assign') ? 'text-red-300' : 'text-red-200 group-hover:text-white' }}">
                             assignment_add
                         </span>
-
                         <span>{{ __('Asignar Tareas') }}</span>
                     </a>
 
+                    <!-- Panel de Tareas -->
                     <a href="{{ route('panel.tareas') }}"
                         class="flex items-center px-4 py-3 text-sm font-medium rounded-lg transition-all duration-200 group
-        {{ request()->routeIs('panel.tareas')
-            ? 'bg-red-900 text-white shadow-inner border-r-4 border-red-300'
-            : 'text-red-100 hover:text-white hover:bg-red-600' }}">
-
+                {{ request()->routeIs('panel.tareas') ? 'bg-red-900 text-white shadow-inner border-r-4 border-red-300' : 'text-red-100 hover:text-white hover:bg-red-600' }}">
                         <span
                             class="material-symbols-outlined text-xl mr-3 
-        {{ request()->routeIs('panel.tareas') ? 'text-red-300' : 'text-red-200 group-hover:text-white' }}">
+                    {{ request()->routeIs('panel.tareas') ? 'text-red-300' : 'text-red-200 group-hover:text-white' }}">
                             supervisor_account
                         </span>
-
-                        <span>{{ __('Supervisor ') }}</span>
+                        <span>{{ __('Supervisor') }}</span>
                     </a>
                 @endif
+
+            </div>
         </nav>
+
         {{-- 
         <a href="{{ route('Registros.index') }}"
             class="flex items-center px-4 py-3 text-sm font-medium rounded-lg transition-all duration-200 group

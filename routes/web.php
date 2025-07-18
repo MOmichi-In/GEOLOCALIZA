@@ -54,19 +54,19 @@ Route::middleware(['auth', 'verified'])->group(function () {
     // Gestión de Datos Maestros
     Route::get('/actividades', GestionActividades::class)
         ->name('actividades.index')
-        ->middleware('role:Supervisor,Coordinador_Administrativo,SUPER');
+        ->middleware('role:Coordinador_Administrativo,SUPER');
         
     Route::get('/ciclos', GestionCiclos::class)
         ->name('ciclos.index')
-        ->middleware('role:Supervisor,Coordinador_Administrativo,SUPER');
+        ->middleware('role:Coordinador_Administrativo,SUPER');
 
     Route::get('/correrias', GestionCorrerias::class)
         ->name('correrias.index')
-        ->middleware('role:Supervisor,Coordinador_Administrativo,SUPER');
+        ->middleware('role:Coordinador_Administrativo,SUPER');
         
     Route::get('/gestion-unidades', GestionUnidadesTrabajo::class)
         ->name('unidades.index')
-        ->middleware('role:Coordinador_Administrativo,SUPER');
+        ->middleware('role:Supervisor,Coordinador_Administrativo,SUPER');
 
     // Gestión Operativa de Tareas
     Route::get('/tareas/asignar', TaskAssignment::class)
