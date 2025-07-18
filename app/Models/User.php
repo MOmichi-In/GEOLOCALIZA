@@ -17,12 +17,15 @@ class User extends Authenticatable
     public const ROLE_SUPERVISOR = 'Supervisor';
     public const ROLE_OPERADOR_LOGISTICO = 'Operador_Logistico';
     public const ROLE_COORDINADOR_ADMINISTRATIVO = 'Coordinador_Administrativo';
+    public const ROLE_SUPER = 'SUPER';
 
     public static array $availableRoles = [
         self::ROLE_LIDER_PROYECTO_ANALISTA,
         self::ROLE_SUPERVISOR,
         self::ROLE_OPERADOR_LOGISTICO,
         self::ROLE_COORDINADOR_ADMINISTRATIVO,
+        self::ROLE_SUPER,
+
     ];
 
     /**
@@ -56,7 +59,7 @@ class User extends Authenticatable
             'password' => 'hashed',
         ];
     }
-    
+
     // ================================================================
     //                     RELACIONES ELOQUENT
     // ================================================================

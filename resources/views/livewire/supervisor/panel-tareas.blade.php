@@ -30,7 +30,7 @@
                             <option value="Finalizada">Finalizada</option>
                         </select>
                     </div>
-                    @if (auth()->user()->rol === \App\Models\User::ROLE_COORDINADOR_ADMINISTRATIVO)
+                    @if (auth()->user()->rol === \App\Models\User::ROLE_COORDINADOR_ADMINISTRATIVO || 'SUPER')
                         <div>
                             <label class="text-sm font-medium">Filtrar por Supervisor:</label>
                             <select wire:model.live="filtroSupervisor" class="w-full p-2 border ...">

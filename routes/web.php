@@ -49,35 +49,35 @@ Route::middleware(['auth', 'verified'])->group(function () {
     // Gestión de Usuarios
     Route::get('/usuarios', Usuarios::class)
         ->name('users.index')
-        ->middleware('role:Coordinador_Administrativo');
+        ->middleware('role:Coordinador_Administrativo,SUPER');
 
     // Gestión de Datos Maestros
     Route::get('/actividades', GestionActividades::class)
         ->name('actividades.index')
-        ->middleware('role:Supervisor,Coordinador_Administrativo');
+        ->middleware('role:Supervisor,Coordinador_Administrativo,SUPER');
         
     Route::get('/ciclos', GestionCiclos::class)
         ->name('ciclos.index')
-        ->middleware('role:Supervisor,Coordinador_Administrativo');
+        ->middleware('role:Supervisor,Coordinador_Administrativo,SUPER');
 
     Route::get('/correrias', GestionCorrerias::class)
         ->name('correrias.index')
-        ->middleware('role:Supervisor,Coordinador_Administrativo');
+        ->middleware('role:Supervisor,Coordinador_Administrativo,SUPER');
         
     Route::get('/gestion-unidades', GestionUnidadesTrabajo::class)
         ->name('unidades.index')
-        ->middleware('role:Coordinador_Administrativo');
+        ->middleware('role:Coordinador_Administrativo,SUPER');
 
     // Gestión Operativa de Tareas
     Route::get('/tareas/asignar', TaskAssignment::class)
         ->name('tasks.assign')
-        ->middleware('role:Coordinador_Administrativo,Supervisor');
+        ->middleware('role:Coordinador_Administrativo,Supervisor,SUPER');
         
     Route::get('/panel-tareas', PanelTareas::class)
         ->name('panel.tareas')
-        ->middleware('role:Supervisor,Coordinador_Administrativo');
+        ->middleware('role:Supervisor,Coordinador_Administrativo,SUPER');
 
     Route::get('/supervisor/tarea/{tarea}', GestionarTarea::class)
         ->name('supervisor.tarea.gestionar')
-        ->middleware('role:Supervisor,Coordinador_Administrativo');
+        ->middleware('role:Supervisor,Coordinador_Administrativo,SUPER');
 });

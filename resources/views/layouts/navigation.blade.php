@@ -14,7 +14,7 @@
         <nav class="mt-1 px-1">
             <div class="space-y-1">
                 <!-- Dashboard -->
-                <a href="{{ route('dashboard') }}"
+                {{-- <a href="{{ route('dashboard') }}"
                     class="flex items-center px-4 py-3 text-sm font-medium rounded-lg transition-all duration-200 group
         {{ request()->routeIs('dashboard')
             ? 'bg-red-900 text-white shadow-inner border-r-4 border-red-300'
@@ -27,10 +27,10 @@
                     </span>
 
                     <span>{{ __('Inicio') }}</span>
-                </a>
+                </a> --}}
 
 
-                @if (Auth::user()->rol === 'Coordinador_Administrativo')
+                @if (Auth::user()->rol === 'Coordinador_Administrativo' || 'SUPER')
                     <!-- Unidades de Trabajo -->
                     <a href="{{ route('unidades.index') }}"
                         class="flex items-center px-4 py-3 text-sm font-medium rounded-lg transition-all duration-200 group
@@ -45,9 +45,72 @@
                         </svg>
                         <span>{{ __('Unidades de Trabajo') }}</span>
                     </a>
+
+
+                    <!-- Usuarios -->
+                    <a href="{{ route('users.index') }}"
+                        class="flex items-center px-4 py-3 text-sm font-medium rounded-lg transition-all duration-200 group
+        {{ request()->routeIs('users')
+            ? 'bg-red-900 text-white shadow-inner border-r-4 border-red-300'
+            : 'text-red-100 hover:text-white hover:bg-red-600' }}">
+
+                        <span
+                            class="material-symbols-outlined text-xl mr-3 
+        {{ request()->routeIs('users.index') ? 'text-red-300' : 'text-red-200 group-hover:text-white' }}">
+                            groups
+                        </span>
+
+                        <span>{{ __('Usuarios') }}</span>
+                    </a>
+                    {{-- Actividades --}}
+                    <a href="{{ route('actividades.index') }}"
+                        class="flex items-center px-4 py-3 text-sm font-medium rounded-lg transition-all duration-200 group
+    {{ request()->routeIs('actividades.index')
+        ? 'bg-red-900 text-white shadow-inner border-r-4 border-red-300'
+        : 'text-red-100 hover:text-white hover:bg-red-600' }}">
+
+                        <span
+                            class="material-symbols-outlined text-xl mr-3 
+    {{ request()->routeIs('actividades.index') ? 'text-red-300' : 'text-red-200 group-hover:text-white' }}">
+                            today
+                        </span>
+
+                        <span>{{ __('Actividades') }}</span>
+                    </a>
+
+                    {{-- ciclos --}}
+                    <a href="{{ route('ciclos.index') }}"
+                        class="flex items-center px-4 py-3 text-sm font-medium rounded-lg transition-all duration-200 group
+        {{ request()->routeIs('ciclos.index')
+            ? 'bg-red-900 text-white shadow-inner border-r-4 border-red-300'
+            : 'text-red-100 hover:text-white hover:bg-red-600' }}">
+
+                        <span
+                            class="material-symbols-outlined text-xl mr-3 
+        {{ request()->routeIs('ciclos.index') ? 'text-red-300' : 'text-red-200 group-hover:text-white' }}">
+                            groups
+                        </span>
+
+                        <span>{{ __('Ciclos') }}</span>
+                    </a>
+                    {{-- correrias --}}
+                    <a href="{{ route('correrias.index') }}"
+                        class="flex items-center px-4 py-3 text-sm font-medium rounded-lg transition-all duration-200 group
+        {{ request()->routeIs('correrias.index')
+            ? 'bg-red-900 text-white shadow-inner border-r-4 border-red-300'
+            : 'text-red-100 hover:text-white hover:bg-red-600' }}">
+
+                        <span
+                            class="material-symbols-outlined text-xl mr-3 
+        {{ request()->routeIs('correrias.index') ? 'text-red-300' : 'text-red-200 group-hover:text-white' }}">
+                            groups
+                        </span>
+
+                        <span>{{ __('Correrias') }}</span>
+                    </a>
                 @endif
 
-                 @if (Auth::user()->rol === 'Coordinador_Administrativo' ||'Supervisor')
+                @if (Auth::user()->rol === 'Coordinador_Administrativo' || 'Supervisor' || 'SUPER')
                     <!-- Asignar Tareas -->
                     <a href="{{ route('tasks.assign') }}"
                         class="flex items-center px-4 py-3 text-sm font-medium rounded-lg transition-all duration-200 group
@@ -79,70 +142,8 @@
                         <span>{{ __('Supervisor ') }}</span>
                     </a>
                 @endif
-
-                <!-- Usuarios -->
-                <a href="{{ route('users.index') }}"
-                    class="flex items-center px-4 py-3 text-sm font-medium rounded-lg transition-all duration-200 group
-        {{ request()->routeIs('users')
-            ? 'bg-red-900 text-white shadow-inner border-r-4 border-red-300'
-            : 'text-red-100 hover:text-white hover:bg-red-600' }}">
-
-                    <span
-                        class="material-symbols-outlined text-xl mr-3 
-        {{ request()->routeIs('users.index') ? 'text-red-300' : 'text-red-200 group-hover:text-white' }}">
-                        groups
-                    </span>
-
-                    <span>{{ __('Usuarios') }}</span>
-                </a>
-                {{-- Actividades --}}
-                <a href="{{ route('actividades.index') }}"
-                    class="flex items-center px-4 py-3 text-sm font-medium rounded-lg transition-all duration-200 group
-    {{ request()->routeIs('actividades.index')
-        ? 'bg-red-900 text-white shadow-inner border-r-4 border-red-300'
-        : 'text-red-100 hover:text-white hover:bg-red-600' }}">
-
-                    <span
-                        class="material-symbols-outlined text-xl mr-3 
-    {{ request()->routeIs('actividades.index') ? 'text-red-300' : 'text-red-200 group-hover:text-white' }}">
-                        today
-                    </span>
-
-                    <span>{{ __('Actividades') }}</span>
-                </a>
-
-                {{-- ciclos --}}
-                <a href="{{ route('ciclos.index') }}"
-                    class="flex items-center px-4 py-3 text-sm font-medium rounded-lg transition-all duration-200 group
-        {{ request()->routeIs('ciclos.index')
-            ? 'bg-red-900 text-white shadow-inner border-r-4 border-red-300'
-            : 'text-red-100 hover:text-white hover:bg-red-600' }}">
-
-                    <span
-                        class="material-symbols-outlined text-xl mr-3 
-        {{ request()->routeIs('ciclos.index') ? 'text-red-300' : 'text-red-200 group-hover:text-white' }}">
-                        groups
-                    </span>
-
-                    <span>{{ __('Ciclos') }}</span>
-                </a>
-                {{-- correrias --}}
-                <a href="{{ route('correrias.index') }}"
-                    class="flex items-center px-4 py-3 text-sm font-medium rounded-lg transition-all duration-200 group
-        {{ request()->routeIs('correrias.index')
-            ? 'bg-red-900 text-white shadow-inner border-r-4 border-red-300'
-            : 'text-red-100 hover:text-white hover:bg-red-600' }}">
-
-                    <span
-                        class="material-symbols-outlined text-xl mr-3 
-        {{ request()->routeIs('correrias.index') ? 'text-red-300' : 'text-red-200 group-hover:text-white' }}">
-                        groups
-                    </span>
-
-                    <span>{{ __('Correrias') }}</span>
-                </a>
         </nav>
-{{-- 
+        {{-- 
         <a href="{{ route('Registros.index') }}"
             class="flex items-center px-4 py-3 text-sm font-medium rounded-lg transition-all duration-200 group
     {{ request()->routeIs('Registros.index')
