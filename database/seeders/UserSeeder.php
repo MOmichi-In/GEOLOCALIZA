@@ -5,6 +5,10 @@ namespace Database\Seeders;
 use Illuminate\Database\Seeder;
 use Illuminate\Support\Facades\Hash;
 use App\Models\User;
+use App\Models\TareaAsignada;
+use App\Models\Ciclo;
+use App\Models\Correria;
+use App\Models\Actividad;
 
 class UserSeeder extends Seeder
 {

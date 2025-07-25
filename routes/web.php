@@ -1,5 +1,6 @@
 <?php
 
+use App\Livewire\Importacion;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\ProfileController;
 
@@ -67,4 +68,10 @@ Route::middleware(['auth', 'verified'])->group(function () {
     Route::get('/supervisor/tarea/{tarea}', GestionarTarea::class)
         ->name('supervisor.tarea.gestionar')
         ->middleware('role:Supervisor,Coordinador_Administrativo,SUPER');
+
+     Route::get('importacion',Importacion::class)
+        ->name('importacion.index')
+        ->middleware('role:Coordinador_Administrativo');
+
+    
 });

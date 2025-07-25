@@ -111,21 +111,21 @@
             </div>
         </nav>
 
-        {{-- 
-        <a href="{{ route('Registros.index') }}"
+        {{-- Importaciones --}}
+        <a href="{{ route('importacion.index') }}"
             class="flex items-center px-4 py-3 text-sm font-medium rounded-lg transition-all duration-200 group
-    {{ request()->routeIs('Registros.index')
-        ? 'bg-red-900 text-white shadow-inner border-r-4 border-red-300'
-        : 'text-red-100 hover:text-white hover:bg-red-600' }}">
+        {{ request()->routeIs('importacion.index')
+            ? 'bg-red-900 text-white shadow-inner border-r-4 border-red-300'
+            : 'text-red-100 hover:text-white hover:bg-red-600' }}">
 
             <span
-                class="material-symbols-outlined text-xl mr-3 
-    {{ request()->routeIs('Registros.index') ? 'text-red-300' : 'text-red-200 group-hover:text-white' }}">
-                fact_check
+                class="material-symbols-outlined text-xl mr-3
+        {{ request()->routeIs('importacion.index') ? 'text-red-300' : 'text-red-200 group-hover:text-white' }}">
+                file_save
             </span>
 
-            <span>{{ __('Registros') }}</span>
-        </a> --}}
+            <span>{{ __('Importacion') }}</span>
+        </a>
 
         <!-- User Profile Section -->
         <div class="absolute bottom-0 left-0 right-0 p-4 bg-red-800 border-t border-red-900">

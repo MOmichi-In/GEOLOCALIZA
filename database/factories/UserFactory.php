@@ -2,43 +2,43 @@
 
 namespace Database\Factories;
 
+use App\Models\User;
 use Illuminate\Database\Eloquent\Factories\Factory;
-use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Str;
 
-/**
- * @extends \Illuminate\Database\Eloquent\Factories\Factory<\App\Models\User>
- */
 class UserFactory extends Factory
 {
-    /**
-     * The current password being used by the factory.
-     */
-    protected static ?string $password;
+    protected $model = User::class;
+    protected static $codigoSupervisorCounter = 1;  // <-- acá la defines
 
-    /**
-     * Define the model's default state.
-     *
-     * @return array<string, mixed>
-     */
-    public function definition(): array
+    public function definition()
     {
+        // Asumamos que los roles son los que definiste en el modelo
+        $roles = User::$availableRoles;
+
         return [
-            'name' => fake()->name(),
-            'email' => fake()->unique()->safeEmail(),
+            'name' => $this->faker->name(),
+            'email' => $this->faker->unique()->safeEmail(),
             'email_verified_at' => now(),
-            'password' => static::$password ??= Hash::make('password'),
+            'password' => bcrypt('password'), // o Hash::make('password')
+            'rol' => $this->faker->randomElement($roles),
+            'cedula' => $this->faker->unique()->regexify('[0-9]{7,8}'),
+            'codigo_supervisor' => str_pad(self::$codigoSupervisorCounter++, 4, '0', STR_PAD_LEFT),
             'remember_token' => Str::random(10),
+            'unidad_trabajo_id' => null, // Aquí puedes poner un valor por defecto o asignar en el Seeder
         ];
     }
 
-    /**
-     * Indicate that the model's email address should be unverified.
-     */
-    public function unverified(): static
+    // Opcional: scopes para roles
+    public function supervisor()
     {
-        return $this->state(fn (array $attributes) => [
-            'email_verified_at' => null,
-        ]);
+        return $this->state(fn() => ['rol' => User::ROLE_SUPERVISOR]);
     }
+
+    public function operadorLogistico()
+    {
+        return $this->state(fn() => ['rol' => User::ROLE_OPERADOR_LOGISTICO]);
+    }
+
+    // etc para otros roles si quieres
 }
