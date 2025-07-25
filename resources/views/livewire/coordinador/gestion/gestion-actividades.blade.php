@@ -1,7 +1,7 @@
 <div>
     <x-slot name="header">
         <h2 class="font-semibold text-xl text-gray-900 leading-tight">
-            {{ __('Gestión de Correrías (Rutas)') }}
+            {{ __('Gestión de Tipos de Actividad') }}
         </h2>
     </x-slot>
 
@@ -22,15 +22,15 @@
 
             <div class="bg-white rounded-lg shadow-md p-6">
                 <div class="flex justify-between items-center mb-6">
-                    <h3 class="text-2xl font-bold text-gray-800">Correrías Registradas</h3>
+                    <h3 class="text-2xl font-bold text-gray-800">Actividades Registradas</h3>
                     <button wire:click="mostrarModal"
                         class="bg-red-700 hover:bg-red-800 text-white px-4 py-3 rounded-lg font-semibold transition">
-                        Crear Nueva Correría
+                        Crear Nueva Actividad
                     </button>
                 </div>
 
                 <div class="mb-4">
-                    <input wire:model.live.debounce.300ms="searchTerm" type="text" placeholder="Buscar correría..."
+                    <input wire:model.live.debounce.300ms="searchTerm" type="text" placeholder="Buscar actividad..."
                         class="w-full lg:w-1/3 p-2 border border-gray-300 rounded-lg">
                 </div>
 
@@ -38,83 +38,61 @@
                     <table class="min-w-full divide-y divide-gray-200">
                         <thead class="bg-gray-50">
                             <tr>
-                                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Nombre
-                                    Correría</th>
-                                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Pertenece al
-                                    Ciclo</th>
+                                <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase">Nombre</th>
                                 <th class="px-6 py-3 text-center text-xs font-medium text-gray-500 uppercase">Acciones
                                 </th>
                             </tr>
                         </thead>
                         <tbody class="bg-white divide-y divide-gray-200">
-                            @forelse ($correrias as $correria)
-                                {{-- ¡ASEGÚRATE DE QUE ESTA LÍNEA ESTÉ ASÍ! --}}
-                                <tr wire:key="correria-{{ $correria->id }}" class="hover:bg-gray-50">
-                                    <td class="px-6 py-4 whitespace-nowrap">{{ $correria->nombre }}</td>
-                                    {{-- Mostramos el nombre del ciclo a través de la relación --}}
-                                    <td class="px-6 py-4 whitespace-nowrap">{{ $correria->ciclo->nombre ?? 'N/A' }}</td>
+                            @forelse ($actividades as $actividad)
+                                <tr wire:key="activity-{{ $actividad->id }}" class="hover:bg-gray-50">
+                                    <td class="px-6 py-4 whitespace-nowrap">{{ $actividad->nombre }}</td>
                                     <td class="px-6 py-4 whitespace-nowrap text-center">
                                         <div class="flex justify-center gap-2">
-                                            {{-- <button wire:click="editar({{ $correria->id }})"
+                                            {{-- <button wire:click="editar({{ $actividad->id }})"
                                                 class="bg-gray-400 hover:bg-gray-600 text-white px-3 py-1 rounded">Editar</button> --}}
-                                            <button wire:click="eliminar({{ $correria->id }})"
-                                                wire:confirm="¿Estás seguro de eliminar esta correría?"
+                                            <button wire:click="eliminar({{ $actividad->id }})"
+                                                wire:confirm="¿Estás seguro de eliminar esta actividad?"
                                                 class="bg-red-800 hover:bg-red-700 text-white px-3 py-1 rounded">Eliminar</button>
                                         </div>
                                     </td>
                                 </tr>
                             @empty
                                 <tr>
-                                    <td colspan="3" class="text-center text-gray-500 py-4">No hay correrías
+                                    <td colspan="2" class="text-center text-gray-500 py-4">No hay actividades
                                         registradas.</td>
                                 </tr>
                             @endforelse
                         </tbody>
                     </table>
                 </div>
-                @if ($correrias->hasPages())
-                    <div class="mt-6">{{ $correrias->links() }}</div>
+
+                {{-- Paginación --}}
+                @if ($actividades->hasPages())
+                    <div class="mt-6">
+                        {{ $actividades->links() }}
+                    </div>
                 @endif
             </div>
         </div>
 
-        {{-- MODAL --}}
         @if ($modalVisible)
             <div class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
                 <div class="bg-white rounded-lg shadow-lg max-w-lg w-full p-6 relative">
                     <button wire:click="ocultarModal"
                         class="absolute top-2 right-2 text-gray-600 hover:text-gray-800 text-xl font-bold">×</button>
                     <h2 class="text-xl font-bold mb-4 text-center">
-                        {{ $editando ? 'Editar Correría' : 'Crear Correría' }}</h2>
+                        {{ $editando ? 'Editar Actividad' : 'Crear Actividad' }}</h2>
 
-                    <form wire:submit.prevent="guardar" class="space-y-4">
-                        {{-- Select para el Ciclo --}}
+                    <form wire:submit.prevent="guardar">
                         <div>
-                            <label for="ciclo_id" class="block text-sm font-medium text-gray-900 mb-1">Ciclo al que
-                                Pertenece</label>
-                            <select wire:model="ciclo_id" id="ciclo_id"
-                                class="w-full px-4 py-2 border rounded-lg focus:ring-red-500 focus:border-red-500">
-                                <option value="">-- Seleccione un ciclo --</option>
-                                @foreach ($ciclos as $ciclo)
-                                    <option value="{{ $ciclo->id }}">{{ $ciclo->nombre }}</option>
-                                @endforeach
-                            </select>
-                            @error('ciclo_id')
-                                <span class="text-red-500 text-sm mt-1">{{ $message }}</span>
-                            @enderror
-                        </div>
-
-                        {{-- Input para el Nombre de la Correría --}}
-                        <div>
-                            <label for="nombre" class="block text-sm font-medium text-gray-900 mb-1">Nombre de la
-                                Correría/Ruta</label>
-                            <input type="text" wire:model="nombre" id="nombre"
+                            <label class="block text-sm font-medium text-gray-900 mb-1">Nombre de la Actividad</label>
+                            <input type="text" wire:model="nombre"
                                 class="w-full px-4 py-2 border rounded-lg focus:ring-red-500 focus:border-red-500">
                             @error('nombre')
                                 <span class="text-red-500 text-sm mt-1">{{ $message }}</span>
                             @enderror
                         </div>
-
                         <div class="flex justify-end gap-3 pt-6">
                             <button type="button" wire:click="ocultarModal"
                                 class="bg-gray-500 hover:bg-gray-600 text-white px-5 py-2 rounded">Cancelar</button>

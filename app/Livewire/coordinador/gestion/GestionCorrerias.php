@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Livewire;
+namespace App\Livewire\coordinador\gestion;
 
 use Livewire\Component;
 use App\Models\Correria;
@@ -41,7 +41,7 @@ class GestionCorrerias extends Component
                            ->latest()
                            ->paginate(10);
 
-        return view('livewire.gestion-correrias', ['correrias' => $correrias])
+        return view('livewire.coordinador.gestion.gestion-correrias', ['correrias' => $correrias])
                ->layout('layouts.app');
     }
     

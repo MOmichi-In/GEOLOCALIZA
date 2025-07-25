@@ -2,7 +2,7 @@
 
 // El namespace puede ser App\Livewire\Supervisor o solo App\Livewire,
 // dependiendo de si moviste el archivo o solo lo renombraste.
-namespace App\Livewire\Supervisor;
+namespace App\Livewire\supervisor;
 
 use Livewire\Component;
 use App\Models\TareaAsignada;

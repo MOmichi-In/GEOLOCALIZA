@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Livewire;
+namespace App\Livewire\coordinador\gestion;
 
 use Livewire\Component;
 use App\Models\Actividad;
@@ -31,7 +31,7 @@ class GestionActividades extends Component
                                  ->latest()
                                  ->paginate(5); // Mostraremos 5 por página
 
-        return view('livewire.gestion-actividades', ['actividades' => $actividades])
+        return view('livewire.coordinador.gestion.gestion-actividades', ['actividades' => $actividades])
                ->layout('layouts.app'); // Le decimos que use nuestra plantilla principal.
     }
     

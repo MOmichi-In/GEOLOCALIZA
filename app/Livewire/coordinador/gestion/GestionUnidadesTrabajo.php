@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Livewire;
+namespace App\Livewire\coordinador\gestion;
 
 use App\Models\UnidadTrabajo;
 use App\Models\User;
@@ -52,7 +52,7 @@ class GestionUnidadesTrabajo extends Component
             ->orderBy('nombre', 'asc')
             ->paginate(10);
 
-        return view('livewire.gestion-unidades-trabajo', [
+        return view('livewire.coordinador.gestion.gestion-unidades-trabajo', [
             'unidades' => $unidades,
         ])->layout('layouts.app');
     }

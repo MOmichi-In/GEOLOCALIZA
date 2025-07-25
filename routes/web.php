@@ -1,61 +1,48 @@
 <?php
 
 use Illuminate\Support\Facades\Route;
-
-// Importa todos tus componentes y controladores aquí arriba
 use App\Http\Controllers\ProfileController;
-use App\Livewire\Usuarios;
-use App\Livewire\TaskAssignment;
-use App\Livewire\Supervisor\PanelTareas;
-use App\Livewire\Supervisor\GestionarTarea;
-use App\Livewire\GestionUnidadesTrabajo;
-use App\Livewire\GestionActividades;
-use App\Livewire\GestionCiclos;
-use App\Livewire\GestionCorrerias;
 
+// Nuevos namespaces con base en tu reestructuración
+use App\Livewire\Coordinador\usuarios\Usuarios;
+use App\Livewire\Coordinador\asignaciones\AsignacionTareas;
+use App\Livewire\supervisor\PanelTareas;
+use App\Livewire\supervisor\GestionarTarea;
+use App\Livewire\coordinador\gestion\GestionUnidadesTrabajo;
+use App\Livewire\coordinador\gestion\GestionActividades;
+use App\Livewire\coordinador\gestion\GestionCiclos;
+use App\Livewire\coordinador\gestion\GestionCorrerias;
 
-/*
-|--------------------------------------------------------------------------
-| Web Routes
-|--------------------------------------------------------------------------
-*/
-
-// --- RUTAS PÚBLICAS (ACCESIBLES SIN INICIAR SESIÓN) ---
 Route::get('/', function () {
     return view('auth.login');
 })->name('login.index');
 
-// Archivo de rutas de autenticación de Breeze/Jetstream
 require __DIR__ . '/auth.php';
 
-// --- RUTAS PROTEGIDAS (REQUIEREN INICIAR SESIÓN) ---
 Route::middleware(['auth', 'verified'])->group(function () {
-    
-    // Ruta principal después de iniciar sesión
+
     Route::get('/dashboard', function () {
         $user = auth()->user();
         if ($user->rol === 'Supervisor' || $user->rol === 'Coordinador_Administrativo') {
             return redirect()->route('panel.tareas');
         }
-        // Puedes añadir más redirecciones para otros roles aquí
         return view('dashboard');
     })->name('dashboard');
 
-    // Perfil de Usuario
+    // Perfil
     Route::get('/profile', [ProfileController::class, 'edit'])->name('profile.edit');
     Route::patch('/profile', [ProfileController::class, 'update'])->name('profile.update');
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
-    
-    // Gestión de Usuarios
+
+    // --- Rutas Coordinador ---
     Route::get('/usuarios', Usuarios::class)
         ->name('users.index')
         ->middleware('role:Coordinador_Administrativo,SUPER');
 
-    // Gestión de Datos Maestros
     Route::get('/actividades', GestionActividades::class)
         ->name('actividades.index')
         ->middleware('role:Coordinador_Administrativo,SUPER');
-        
+
     Route::get('/ciclos', GestionCiclos::class)
         ->name('ciclos.index')
         ->middleware('role:Coordinador_Administrativo,SUPER');
@@ -63,16 +50,16 @@ Route::middleware(['auth', 'verified'])->group(function () {
     Route::get('/correrias', GestionCorrerias::class)
         ->name('correrias.index')
         ->middleware('role:Coordinador_Administrativo,SUPER');
-        
+
     Route::get('/gestion-unidades', GestionUnidadesTrabajo::class)
         ->name('unidades.index')
         ->middleware('role:Supervisor,Coordinador_Administrativo,SUPER');
 
-    // Gestión Operativa de Tareas
-    Route::get('/tareas/asignar', TaskAssignment::class)
+    Route::get('/tareas/asignar', AsignacionTareas::class)
         ->name('tasks.assign')
         ->middleware('role:Coordinador_Administrativo,Supervisor,SUPER');
-        
+
+    // --- Rutas Supervisor ---
     Route::get('/panel-tareas', PanelTareas::class)
         ->name('panel.tareas')
         ->middleware('role:Supervisor,Coordinador_Administrativo,SUPER');

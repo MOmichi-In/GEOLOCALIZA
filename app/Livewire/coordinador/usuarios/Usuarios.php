@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Livewire;
+namespace App\Livewire\coordinador\usuarios;
 
 use Livewire\Component;
 use App\Models\User;
@@ -25,7 +25,7 @@ class Usuarios extends Component
     public function render()
     {
         $usuarios = User::latest()->paginate(10);
-        return view('livewire.usuarios', ['usuarios' => $usuarios])->layout('layouts.app');
+        return view('livewire.coordinador.usuarios.usuarios', ['usuarios' => $usuarios])->layout('layouts.app');
     }
 
     // Unifica las reglas de validación para crear y editar

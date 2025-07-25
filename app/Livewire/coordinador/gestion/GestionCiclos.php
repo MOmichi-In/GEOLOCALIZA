@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Livewire;
+namespace App\Livewire\coordinador\gestion;
 
 use Livewire\Component;
 use App\Models\Ciclo;
@@ -27,7 +27,7 @@ class GestionCiclos extends Component
                        ->latest()
                        ->paginate(5);
 
-        return view('livewire.gestion-ciclos', ['ciclos' => $ciclos])
+        return view('livewire.coordinador.gestion.gestion-ciclos', ['ciclos' => $ciclos])
                ->layout('layouts.app');
     }
     

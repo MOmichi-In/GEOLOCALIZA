@@ -219,7 +219,6 @@
             return {
                 signaturePad: null,
                 initPad() {
-                    // Pequeño retraso para asegurar que el canvas es visible en el DOM de Alpine
                     this.$nextTick(() => {
                         this.signaturePad = new SignaturePad(this.$refs.pad, {
                             backgroundColor: null // bg-gray-100
@@ -254,7 +253,6 @@
     Livewire.on('tareaFinalizada', () => {
         alert('✅ Tarea finalizada correctamente.');
 
-        // Refrescar la página para reflejar estado actualizado si quieres:
         location.reload();
     });
 </script>

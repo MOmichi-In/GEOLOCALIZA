@@ -1,18 +1,17 @@
 <?php
 
-namespace App\Livewire;
+namespace App\Livewire\coordinador\asignaciones;
 
 use Livewire\Component;
 use App\Models\User;
 use App\Models\TareaAsignada;
-use App\Models\RegistroAsistencia;
 use App\Models\Ciclo;
 use App\Models\Correria;
 use App\Models\Actividad;
 use Livewire\WithPagination;
 use Illuminate\Validation\Rule;
 
-class TaskAssignment extends Component
+class AsignacionTareas extends Component
 {
     use WithPagination;
 
@@ -79,7 +78,7 @@ class TaskAssignment extends Component
             ->latest('fecha_inicio')
             ->paginate(10);
 
-        return view('livewire.task-assignment', ['tareasPaginadas' => $tareasPaginadas])->layout('layouts.app');
+        return view('livewire.supervisor.asignacion-tareas', ['tareasPaginadas' => $tareasPaginadas])->layout('layouts.app');
     }
 
     // --- HOOKS DE PROPIEDADES (LÓGICA DINÁMICA) ---

@@ -12,7 +12,6 @@
     <div class="py-12">
         <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
             <div class="bg-white rounded-lg shadow-md p-6">
-                {{-- Sección de Filtros --}}
                 <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 mb-6">
                     <div>
                         <label class="text-sm font-medium">Buscar Operador:</label>
@@ -47,7 +46,6 @@
                     <table class="min-w-full ...">
                         <thead class="bg-gray-50">
                             <tr>
-                                {{-- ¡OJO! CAMBIO IMPORTANTE EN LA VISTA PARA ENLAZAR A LA RUTA CORRECTA --}}
                                 <th class="px-6 py-3 ...">Operador</th>
                                 <th class="px-6 py-3 ...">Supervisor</th>
                                 <th class="px-6 py-3 ...">Actividad</th>
@@ -58,16 +56,12 @@
                         <tbody>
                             @forelse ($tareas as $tarea)
                                 <tr>
-                                    {{-- Operador --}}
                                     <td class="px-6 py-4">{{ $tarea->operador->name ?? 'N/A' }}</td>
 
-                                    {{-- Supervisor --}}
                                     <td class="px-6 py-4">{{ $tarea->supervisor->name ?? 'N/A' }}</td>
 
-                                    {{-- Actividad --}}
                                     <td class="px-6 py-4">{{ $tarea->actividad->nombre ?? 'N/A' }}</td>
 
-                                    {{-- Estado --}}
                                     <td class="px-6 py-4">
                                         @if ($tarea->estado === 'Asignada')
                                             <span
@@ -84,7 +78,6 @@
                                         @endif
                                     </td>
 
-                                    {{-- Acción --}}
                                     <td class="px-6 py-4 text-center">
                                         <a href="{{ route('supervisor.tarea.gestionar', $tarea->id) }}"
                                             class="text-indigo-600 hover:text-indigo-900 font-medium">Gestionar</a>
@@ -100,7 +93,7 @@
 
                     </table>
                 </div>
-                {{-- ... paginación ... --}}
+                {{-- ... falta paginacion... --}}
             </div>
         </div>
     </div>

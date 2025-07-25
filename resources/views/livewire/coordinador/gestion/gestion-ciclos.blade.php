@@ -1,5 +1,4 @@
 <div>
-    {{-- Título de la página --}}
     <x-slot name="header">
         <h2 class="font-semibold text-xl text-gray-900 leading-tight">
             {{ __('Gestión de Ciclos') }}
@@ -9,7 +8,6 @@
     <div class="py-12">
         <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
 
-            {{-- Mensajes Flash --}}
             @if (session()->has('message'))
                 <div
                     class="bg-green-100 border border-green-400 text-green-700 px-4 py-3 rounded mb-6 flex items-center">
@@ -57,7 +55,6 @@
                         </thead>
                         <tbody class="bg-white divide-y divide-gray-200">
                             @forelse ($ciclos as $ciclo)
-                                {{-- ¡Asegúrate de añadir esto aquí! --}}
                                 <tr wire:key="ciclo-{{ $ciclo->id }}" class="hover:bg-gray-50">
                                     <td class="px-6 py-4 whitespace-nowrap">{{ $ciclo->nombre }}</td>
                                     <td class="px-6 py-4 whitespace-nowrap text-center">

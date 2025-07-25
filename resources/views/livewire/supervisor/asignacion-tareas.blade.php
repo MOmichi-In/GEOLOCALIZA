@@ -5,7 +5,6 @@
         </h2>
     </x-slot>
 
-    {{-- Notificaciones Flash --}}
     <div class="max-w-7xl mx-auto sm:px-6 lg:px-8 py-4">
         @if (session()->has('message'))
             <div class="bg-green-100 border border-green-400 text-green-700 px-4 py-3 rounded mb-4 flex items-center">
@@ -28,7 +27,6 @@
         @endif
     </div>
 
-    {{-- Contenido Principal --}}
     <div class="max-w-7xl mx-auto sm:px-6 lg:px-8">
         <div class="bg-white rounded-lg shadow-md p-6">
             <div class="flex justify-between items-center mb-6">
@@ -39,7 +37,6 @@
                 </button>
             </div>
 
-            {{-- Tabla de Tareas --}}
             <div class="overflow-x-auto rounded-lg border border-gray-200">
                 <table class="min-w-full divide-y divide-gray-200">
                     <thead class="bg-gray-50">
@@ -114,7 +111,6 @@
         </div>
     </div>
 
-    {{-- MODAL PARA CREAR/EDITAR TAREA --}}
     @if ($isModalOpen)
         <div class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4">
             <div class="bg-white rounded-lg shadow-lg max-w-3xl w-full p-6 relative">
